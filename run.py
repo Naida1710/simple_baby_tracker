@@ -91,6 +91,11 @@ def log_daily_baby_data():
                feed_ml, wet_diapers, dirty_diapers]
     daily_logs.append_row(new_row)
     print("✅ Daily log saved successfully!")
+    
+
+# --- Growth Log Entry ---
+def log_growth_data():
+    print("\n--- Log Growth Data ---")
 
 
 def main():
