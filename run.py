@@ -137,6 +137,15 @@ def log_milestone():
     except ValueError:
         print("Invalid date format.")
         return
+    
+    milestone = input("Enter milestone description: ").strip()
+    if not milestone:
+        print("Milestone description cannot be empty.")
+        return
+
+    new_row = [username, date, milestone]
+    milestones.append_row(new_row)
+    print("✅ Milestone saved successfully!")
 
 
 def main():
