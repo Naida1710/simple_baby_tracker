@@ -13,8 +13,11 @@ SCOPED_CREDS = CREDS.with_scopes(SCOPE)
 GSPREAD_CLIENT = gspread.authorize(SCOPED_CREDS)
 SHEET = GSPREAD_CLIENT.open('simple_baby_tracker')
 
-user_info = SHEET.worksheet ('user_info')
+user_info = SHEET.worksheet('user_info')
 
-data = user_info.get_all_values()
 
-print(data)
+def calculate_age_months(dob_str):
+    dob = datetime.strptime(dob_str, '%Y-%m-%d')
+    today = datetime.today()
+    age_months = (today.year - dob.year) * 12 + (today.month - dob.month)
+    return age_months
