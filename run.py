@@ -1,13 +1,14 @@
 import gspread
 from google.oauth2.service_account import Credentials
-from datetime import datetime
+from datetime import datetime, timedelta
 
-# --- Google Sheets Setup ---
 SCOPE = [
     "https://www.googleapis.com/auth/spreadsheets",
     "https://www.googleapis.com/auth/drive.file",
     "https://www.googleapis.com/auth/drive"
 ]
+
+# Google Sheets credentials and setup
 CREDS = Credentials.from_service_account_file('creds.json')
 SCOPED_CREDS = CREDS.with_scopes(SCOPE)
 GSPREAD_CLIENT = gspread.authorize(SCOPED_CREDS)
@@ -17,24 +18,25 @@ user_info = SHEET.worksheet('user_info')
 daily_logs = SHEET.worksheet('daily_logs')
 growth = SHEET.worksheet('growth')
 milestones = SHEET.worksheet('milestones')
-summary = SHEET.worksheet('summary') 
+summary_sheet = SHEET.worksheet('summary')  # Added summary worksheet
 
 
 # --- Helper Functions ---
 def calculate_age_months(dob_str):
     dob = datetime.strptime(dob_str, '%Y-%m-%d')
     today = datetime.today()
-    return (today.year - dob.year) * 12 + (today.month - dob.month)
+    age_months = (today.year - dob.year) * 12 + (today.month - dob.month)
+    return age_months
 
 
 def is_username_taken(username):
-    all_usernames = user_info.col_values(1)
+    all_usernames = user_info.col_values(1)  # first column = Username
     return username in all_usernames
 
 
 # --- User Registration ---
 def add_new_user():
-    print("\n--- Register New User ---")
+    print("Add new user info:")
 
     while True:
         username = input("Username: ").strip()
@@ -59,7 +61,7 @@ def add_new_user():
     new_row = [username, password, baby_name, baby_dob,
                str(baby_age_months), birth_weight, birth_height]
     user_info.append_row(new_row)
-    print("✅ User added successfully!")
+    print("User added successfully!")
 
 
 # --- Daily Log Entry ---
@@ -126,38 +128,7 @@ def update_log_date():
         print("❌ No matching record found.")
 
 
-# --- Delete Daily Log Entry ---
-def delete_daily_log():
-    print("\n--- Delete Daily Log Entry ---")
-
-    username = input("Enter your username: ").strip()
-    if not is_username_taken(username):
-        print("Username not found.")
-        return
-
-    date = input("The date of the entry to delete (YYYY-MM-DD): ").strip()
-
-    try:
-        datetime.strptime(date, "%Y-%m-%d")
-    except ValueError:
-        print("Invalid date format.")
-        return
-
-    records = daily_logs.get_all_values()
-    deleted = False
-
-    for i, row in enumerate(records[1:], start=2):  # Skip header
-        if row[0].strip() == username and row[1].strip() == date:
-            daily_logs.delete_rows(i)
-            print(f"🗑️ Deleted entry for {username} on {date} (row {i}).")
-            deleted = True
-            break
-
-    if not deleted:
-        print("❌ No matching entry found to delete.")
-
-
-# --- Growth Log Entry ---
+# --- Growth Entry ---
 def log_growth_data():
     print("\n--- Log Growth Data ---")
 
@@ -182,12 +153,12 @@ def log_growth_data():
 
     new_row = [username, date, weight, height]
     growth.append_row(new_row)
-    print("📈 Growth data saved!")
+    print("✅ Growth data logged successfully!")
 
 
-# --- Milestone Log Entry ---
-def log_milestone():
-    print("\n--- Log Milestone ---")
+# --- Milestone Entry ---
+def log_milestones():
+    print("\n--- Log Baby Milestone ---")
 
     username = input("Enter your username: ").strip()
     if not is_username_taken(username):
@@ -201,16 +172,75 @@ def log_milestone():
         print("Invalid date format.")
         return
 
-    milestone = input("Enter Milestone Description: ").strip()
+    milestone = input("Describe the milestone: ").strip()
 
     new_row = [username, date, milestone]
     milestones.append_row(new_row)
-    print("🏆 Milestone saved!")
-    
+    print("🎉 Milestone logged successfully!")
+
 
 # --- Summary Update ---
 def update_summary():
     print("\n--- Updating summary sheet ---")
+
+    # Clear the summary sheet before writing new data
+    summary_sheet.clear()
+
+    # Write header row
+    headers = ["Username", "Total Sleep This Week", "Average Feed (ml)",
+               "Milestones Achieved", "Notes", "Latest Weight",
+               "Latest Height"]
+    summary_sheet.append_row(headers)
+
+    today = datetime.today()
+    week_ago = today - timedelta(days=7)
+
+    user_rows = user_info.get_all_values()[1:]  # skip header
+    daily_rows = daily_logs.get_all_values()[1:]
+    milestone_rows = milestones.get_all_values()[1:]
+    growth_rows = growth.get_all_values()[1:]
+
+    for user_row in user_rows:
+        username = user_row[0]
+
+        # Calculate total sleep and average feed in last 7 days
+        sleep_sum = 0
+        feed_values = []
+        for d_row in daily_rows:
+            if d_row[0] == username:
+                try:
+                    log_date = datetime.strptime(d_row[1], "%Y-%m-%d")
+                except ValueError:
+                    continue
+                if log_date >= week_ago:
+                    sleep_sum += float(d_row[2])
+                    feed_values.append(float(d_row[3]))
+
+        avg_feed = round(sum(feed_values) /
+                         len(feed_values), 2) if feed_values else 0
+
+        # Count milestones achieved
+        milestones_count = sum(1 for m in milestone_rows if m[0] == username)
+
+        # Notes (empty for now)
+        notes = ""
+
+        # Get latest weight and height from growth sheet
+        user_growth = [g for g in growth_rows if g[0] == username]
+        latest_weight = ""
+        latest_height = ""
+
+        if user_growth:
+            user_growth.sort(key=lambda x:
+                             datetime.strptime(x[1], "%Y-%m-%d"), reverse=True)
+            latest_weight = user_growth[0][2]
+            latest_height = user_growth[0][3]
+
+        new_summary_row = [username, sleep_sum, avg_feed, milestones_count,
+                           notes, latest_weight, latest_height]
+        summary_sheet.append_row(new_summary_row)
+
+    print("✅ Summary sheet updated!")
 
 
 # --- Main Menu ---
@@ -224,8 +254,8 @@ def main():
         print("3. Update Daily Log Date")
         print("4. Log Growth Data")
         print("5. Log Milestones")
-        print("6. Delete Daily Log Entry")
-        print("7. Quit")
+        print("6. Quit")
+        print("7. Update Summary Sheet")  # New option added
 
         choice = input("Enter 1–7: ").strip()
 
@@ -238,14 +268,14 @@ def main():
         elif choice == '4':
             log_growth_data()
         elif choice == '5':
-            log_milestone()
+            log_milestones()
         elif choice == '6':
-            delete_daily_log()
-        elif choice == '7':
             print("Goodbye!")
             break
+        elif choice == '7':
+            update_summary()
         else:
-            print("Invalid option. Please enter 1–7.")
+            print("Invalid option. Please enter a number between 1 and 7.")
 
 
 if __name__ == "__main__":
