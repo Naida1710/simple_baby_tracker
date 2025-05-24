@@ -91,12 +91,24 @@ def log_daily_baby_data():
                feed_ml, wet_diapers, dirty_diapers]
     daily_logs.append_row(new_row)
     print("✅ Daily log saved successfully!")
-    
+
 
 # --- Growth Log Entry ---
 def log_growth_data():
     print("\n--- Log Growth Data ---")
+    
+    username = input("Enter your username: ").strip()
+    if not is_username_taken(username):
+        print("Username not found. Please register first.")
+        return
 
+    date = input("Date (YYYY-MM-DD): ").strip()
+    try:
+        datetime.strptime(date, "%Y-%m-%d")
+    except ValueError:
+        print("Invalid date format.")
+        return
+    
 
 def main():
     print("Welcome to Simple Baby Tracker")
