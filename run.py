@@ -122,6 +122,11 @@ def log_growth_data():
     print("✅ Growth data saved successfully!")
 
 
+# --- Milestones Log Entry ---
+def log_milestone():
+    print("\n--- Log Milestone ---")
+
+
 def main():
     print("Welcome to Simple Baby Tracker")
 
