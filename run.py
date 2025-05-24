@@ -219,8 +219,15 @@ def update_summary():
         avg_feed = round(sum(feed_values) /
                          len(feed_values), 2) if feed_values else 0
 
-        # Count milestones achieved
-        milestones_count = sum(1 for m in milestone_rows if m[0] == username)
+        # Count unique milestones, ignoring any with "none"
+        user_milestones = set()
+        for m in milestone_rows:
+            if m[0] == username:
+                milestone_text = m[2].strip().lower()
+                if milestone_text and "none" not in milestone_text:
+                    user_milestones.add(milestone_text)
+
+        milestones_count = len(user_milestones)
 
         # Notes (empty for now)
         notes = ""
