@@ -206,6 +206,11 @@ def log_milestone():
     new_row = [username, date, milestone]
     milestones.append_row(new_row)
     print("🏆 Milestone saved!")
+    
+
+# --- Summary Update ---
+def update_summary():
+    print("\n--- Updating summary sheet ---")
 
 
 # --- Main Menu ---
