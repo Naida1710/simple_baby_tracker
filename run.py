@@ -128,19 +128,22 @@ def main():
         print("\nChoose an option:")
         print("1. Register New User")
         print("2. Log Daily Baby Data")
-        print("3. Quit")
+        print("3. Log Growth Data")
+        print("4. Quit")
 
-        choice = input("Enter 1, 2, or 3: ").strip()
+        choice = input("Enter 1, 2, 3 or 4: ").strip()
 
         if choice == '1':
             add_new_user()
         elif choice == '2':
             log_daily_baby_data()
         elif choice == '3':
+            log_growth_data()
+        elif choice == '4':
             print("Goodbye!")
             break
         else:
-            print("Invalid option. Please enter 1, 2, or 3.")
+            print("Invalid option. Please enter 1, 2, 3, or 4.")
 
 
 if __name__ == "__main__":
