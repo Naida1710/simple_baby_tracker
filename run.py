@@ -7,7 +7,7 @@ SCOPE = [
     "https://www.googleapis.com/auth/drive.file",
     "https://www.googleapis.com/auth/drive"
     ]
-
+# Google Sheets credentials and setup
 CREDS = Credentials.from_service_account_file('creds.json')
 SCOPED_CREDS = CREDS.with_scopes(SCOPE)
 GSPREAD_CLIENT = gspread.authorize(SCOPED_CREDS)
@@ -17,6 +17,7 @@ user_info = SHEET.worksheet('user_info')
 daily_logs = SHEET.worksheet('daily_logs')
 
 
+# --- Helper Functions ---
 def calculate_age_months(dob_str):
     dob = datetime.strptime(dob_str, '%Y-%m-%d')
     today = datetime.today()
@@ -29,6 +30,7 @@ def is_username_taken(username):
     return username in all_usernames
 
 
+# --- User Registration ---
 def add_new_user():
     print("Add new user info:")
 
@@ -56,6 +58,16 @@ def add_new_user():
                str(baby_age_months), birth_weight, birth_height]
     user_info.append_row(new_row)
     print("User added successfully!")
+
+
+# --- Daily Log Entry ---
+def log_daily_baby_data():
+    print("\n--- Log Daily Baby Data ---")
+
+    username = input("Enter your username: ").strip()
+    if not is_username_taken(username):
+        print("Username not found. Please register first.")
+        return
 
 
 def main():
