@@ -26,3 +26,19 @@ def calculate_age_months(dob_str):
 def is_username_taken(username):
     all_usernames = user_info.col_values(1)  # first column = Username
     return username in all_usernames
+
+
+def add_new_user():
+    print("Add new user info:")
+    
+    while True:
+        username = input("Username: ").strip()
+        if is_username_taken(username):
+            print("Username already taken. Please try another.")
+        else:
+            break
+
+    password = input("Password: ").strip()
+    baby_name = input("Baby Name: ").strip()
+    baby_dob = input("Baby DOB (YYYY-MM-DD): ").strip()
+
