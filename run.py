@@ -126,6 +126,11 @@ def log_growth_data():
 def log_milestone():
     print("\n--- Log Milestone ---")
 
+    username = input("Enter your username: ").strip()
+    if not is_username_taken(username):
+        print("Username not found. Please register first.")
+        return
+
 
 def main():
     print("Welcome to Simple Baby Tracker")
