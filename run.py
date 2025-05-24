@@ -42,9 +42,16 @@ def add_new_user():
     baby_name = input("Baby Name: ").strip()
     baby_dob = input("Baby DOB (YYYY-MM-DD): ").strip()
 
-
     try:
         baby_age_months = calculate_age_months(baby_dob)
     except ValueError:
         print("Invalid date format. Please use YYYY-MM-DD.")
         return
+    
+    birth_weight = input("Birth Weight (kg or lbs): ").strip()
+    birth_height = input("Birth Height (cm or inches): ").strip()
+
+    new_row = [username, password, baby_name, baby_dob, 
+               str(baby_age_months), birth_weight, birth_height]
+    user_info.append_row(new_row)
+    print("User added successfully!")
