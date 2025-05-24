@@ -21,3 +21,8 @@ def calculate_age_months(dob_str):
     today = datetime.today()
     age_months = (today.year - dob.year) * 12 + (today.month - dob.month)
     return age_months
+
+
+def is_username_taken(username):
+    all_usernames = user_info.col_values(1)  # first column = Username
+    return username in all_usernames
