@@ -2,13 +2,12 @@ import gspread
 from google.oauth2.service_account import Credentials
 from datetime import datetime
 
+# --- Google Sheets Setup ---
 SCOPE = [
     "https://www.googleapis.com/auth/spreadsheets",
     "https://www.googleapis.com/auth/drive.file",
     "https://www.googleapis.com/auth/drive"
 ]
-
-# Google Sheets credentials and setup
 CREDS = Credentials.from_service_account_file('creds.json')
 SCOPED_CREDS = CREDS.with_scopes(SCOPE)
 GSPREAD_CLIENT = gspread.authorize(SCOPED_CREDS)
@@ -24,18 +23,17 @@ milestones = SHEET.worksheet('milestones')
 def calculate_age_months(dob_str):
     dob = datetime.strptime(dob_str, '%Y-%m-%d')
     today = datetime.today()
-    age_months = (today.year - dob.year) * 12 + (today.month - dob.month)
-    return age_months
+    return (today.year - dob.year) * 12 + (today.month - dob.month)
 
 
 def is_username_taken(username):
-    all_usernames = user_info.col_values(1)  # first column = Username
+    all_usernames = user_info.col_values(1)
     return username in all_usernames
 
 
 # --- User Registration ---
 def add_new_user():
-    print("Add new user info:")
+    print("\n--- Register New User ---")
 
     while True:
         username = input("Username: ").strip()
@@ -60,7 +58,7 @@ def add_new_user():
     new_row = [username, password, baby_name, baby_dob,
                str(baby_age_months), birth_weight, birth_height]
     user_info.append_row(new_row)
-    print("User added successfully!")
+    print("✅ User added successfully!")
 
 
 # --- Daily Log Entry ---
@@ -127,7 +125,39 @@ def update_log_date():
         print("❌ No matching record found.")
 
 
-# --- Growth Entry ---
+# --- Delete Daily Log Entry ---
+def delete_daily_log():
+    print("\n--- Delete Daily Log Entry ---")
+
+    username = input("Enter your username: ").strip()
+    if not is_username_taken(username):
+        print("Username not found.")
+        return
+
+    date = input(
+        "Enter the date of the entry to delete (YYYY-MM-DD): ").strip()
+
+    try:
+        datetime.strptime(date, "%Y-%m-%d")
+    except ValueError:
+        print("Invalid date format.")
+        return
+
+    records = daily_logs.get_all_values()
+    deleted = False
+
+    for i, row in enumerate(records[1:], start=2):  # Skip header
+        if row[0].strip() == username and row[1].strip() == date:
+            daily_logs.delete_rows(i)
+            print(f"🗑️ Deleted entry for {username} on {date} (row {i}).")
+            deleted = True
+            break
+
+    if not deleted:
+        print("❌ No matching entry found to delete.")
+
+
+# --- Growth Log Entry ---
 def log_growth_data():
     print("\n--- Log Growth Data ---")
 
@@ -152,12 +182,12 @@ def log_growth_data():
 
     new_row = [username, date, weight, height]
     growth.append_row(new_row)
-    print("✅ Growth data logged successfully!")
+    print("📈 Growth data saved!")
 
 
-# --- Milestone Entry ---
-def log_milestones():
-    print("\n--- Log Baby Milestone ---")
+# --- Milestone Log Entry ---
+def log_milestone():
+    print("\n--- Log Milestone ---")
 
     username = input("Enter your username: ").strip()
     if not is_username_taken(username):
@@ -171,11 +201,11 @@ def log_milestones():
         print("Invalid date format.")
         return
 
-    milestone = input("Describe the milestone: ").strip()
+    milestone = input("Enter Milestone Description: ").strip()
 
     new_row = [username, date, milestone]
     milestones.append_row(new_row)
-    print("🎉 Milestone logged successfully!")
+    print("🏆 Milestone saved!")
 
 
 # --- Main Menu ---
@@ -189,9 +219,10 @@ def main():
         print("3. Update Daily Log Date")
         print("4. Log Growth Data")
         print("5. Log Milestones")
-        print("6. Quit")
+        print("6. Delete Daily Log Entry")
+        print("7. Quit")
 
-        choice = input("Enter 1–6: ").strip()
+        choice = input("Enter 1–7: ").strip()
 
         if choice == '1':
             add_new_user()
@@ -202,12 +233,14 @@ def main():
         elif choice == '4':
             log_growth_data()
         elif choice == '5':
-            log_milestones()
+            log_milestone()
         elif choice == '6':
+            delete_daily_log()
+        elif choice == '7':
             print("Goodbye!")
             break
         else:
-            print("Invalid option. Please enter a number between 1 and 6.")
+            print("Invalid option. Please enter 1–7.")
 
 
 if __name__ == "__main__":
