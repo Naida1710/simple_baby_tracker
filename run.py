@@ -18,6 +18,22 @@ daily_logs = SHEET.worksheet('daily_logs')
 growth = SHEET.worksheet('growth')
 milestones = SHEET.worksheet('milestones')
 
+# Create or open summary worksheet
+try:
+    summary = SHEET.worksheet('summary')
+except gspread.exceptions.WorksheetNotFound:
+    summary = SHEET.add_worksheet(title='summary', rows='100', cols='10')
+    # Setup headers
+    summary.append_row([
+        'Username',
+        'Total Sleep This Week',
+        'Average Feed (ml)',
+        'Milestones Achieved',
+        'Notes',
+        'Latest Weight',
+        'Latest Height'
+    ])
+    
 
 # --- Helper Functions ---
 def calculate_age_months(dob_str):
