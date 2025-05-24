@@ -130,6 +130,13 @@ def log_milestone():
     if not is_username_taken(username):
         print("Username not found. Please register first.")
         return
+    
+    date = input("Date (YYYY-MM-DD): ").strip()
+    try:
+        datetime.strptime(date, "%Y-%m-%d")
+    except ValueError:
+        print("Invalid date format.")
+        return
 
 
 def main():
