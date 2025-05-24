@@ -7,6 +7,7 @@ SCOPE = [
     "https://www.googleapis.com/auth/drive.file",
     "https://www.googleapis.com/auth/drive"
     ]
+
 # Google Sheets credentials and setup
 CREDS = Credentials.from_service_account_file('creds.json')
 SCOPED_CREDS = CREDS.with_scopes(SCOPE)
@@ -69,14 +70,48 @@ def log_daily_baby_data():
         print("Username not found. Please register first.")
         return
 
+    date = input("Date (YYYY-MM-DD): ").strip()
+    try:
+        datetime.strptime(date, "%Y-%m-%d")
+    except ValueError:
+        print("Invalid date format.")
+        return
+
+    try:
+        sleep_hours = float(input("Sleep (hours): "))
+        feed_ml = float(input("Feed (ml): "))
+        wet_diapers = int(input("Wet Diapers: "))
+        dirty_diapers = int(input("Dirty Diapers: "))
+    except ValueError:
+        print("Please enter numeric values.")
+        return
+
+    new_row = [username, date, sleep_hours,
+               feed_ml, wet_diapers, dirty_diapers]
+    daily_logs.append_row(new_row)
+    print("✅ Daily log saved successfully!")
+
 
 def main():
-    # Optional: print current users
-    print("Current users:")
-    for row in user_info.get_all_values()[1:]:  # skip header row
-        print(f"- {row[0]} (Baby: {row[2]})")
+    print("Welcome to Simple Baby Tracker")
 
-    add_new_user()
+    while True:
+        print("\nChoose an option:")
+        print("1. Register New User")
+        print("2. Log Daily Baby Data")
+        print("3. Quit")
+
+        choice = input("Enter 1, 2, or 3: ").strip()
+
+        if choice == '1':
+            add_new_user()
+        elif choice == '2':
+            log_daily_baby_data()
+        elif choice == '3':
+            print("Goodbye!")
+            break
+        else:
+            print("Invalid option. Please enter 1, 2, or 3.")
 
 
 if __name__ == "__main__":
