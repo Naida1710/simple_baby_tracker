@@ -16,6 +16,7 @@ SHEET = GSPREAD_CLIENT.open('simple_baby_tracker')
 
 user_info = SHEET.worksheet('user_info')
 daily_logs = SHEET.worksheet('daily_logs')
+growth = SHEET.worksheet('growth')
 
 
 # --- Helper Functions ---
