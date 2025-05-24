@@ -96,7 +96,7 @@ def log_daily_baby_data():
 # --- Growth Log Entry ---
 def log_growth_data():
     print("\n--- Log Growth Data ---")
-    
+
     username = input("Enter your username: ").strip()
     if not is_username_taken(username):
         print("Username not found. Please register first.")
@@ -108,7 +108,18 @@ def log_growth_data():
     except ValueError:
         print("Invalid date format.")
         return
-    
+
+    try:
+        weight = float(input("Weight (kg): "))
+        height = float(input("Height (cm): "))
+    except ValueError:
+        print("Please enter numeric values for weight and height.")
+        return
+
+    new_row = [username, date, weight, height]
+    growth.append_row(new_row)
+    print("✅ Growth data saved successfully!")
+
 
 def main():
     print("Welcome to Simple Baby Tracker")
