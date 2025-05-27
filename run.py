@@ -294,7 +294,10 @@ def main():
 
         if choice == '1':
             if add_new_user():
-                print("Please log in to continue.")
+                print("\nRegistration successful! Moving to daily logs.")
+                log_daily_baby_data()
+                print("Thank you for logging your baby's data. Goodbye!")
+                return  # exit program after logging
             else:
                 print("Registration failed. Try again.")
         elif choice == '2':
@@ -309,7 +312,7 @@ def main():
         else:
             print("Invalid input. Please enter 1, 2, or 3.")
 
-    # Main app menu after login or registration
+    # Main app menu after login
     while True:
         print("\nChoose an option:")
         print("1. Log Daily Baby Data")
