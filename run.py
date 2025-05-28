@@ -1,6 +1,7 @@
 import gspread
 from google.oauth2.service_account import Credentials
 from datetime import datetime, timedelta
+import sys
 
 SCOPE = [
     "https://www.googleapis.com/auth/spreadsheets",
@@ -22,6 +23,14 @@ summary_sheet = SHEET.worksheet('summary')
 
 
 # --- Helper Functions ---
+def user_input(prompt):
+    response = input(prompt).strip()
+    if response.lower() in ['q', 'quit', 'exit']:
+        print("Exiting the program. Goodbye!")
+        sys.exit()
+    return response
+
+
 def calculate_age_months(dob_str):
     dob = datetime.strptime(dob_str, '%Y-%m-%d')
     today = datetime.today()
@@ -47,15 +56,15 @@ def add_new_user():
     print("Add new user info:")
 
     while True:
-        username = input("Username: ").strip()
+        username = user_input("Username (or type 'q' to quit): ")
         if is_username_taken(username):
             print("Username already taken. Please try another.")
         else:
             break
 
-    password = input("Password: ").strip()
-    baby_name = input("Baby Name: ").strip()
-    baby_dob = input("Baby DOB (YYYY-MM-DD): ").strip()
+    password = user_input("Password (or type 'q' to quit): ")
+    baby_name = user_input("Baby Name (or type 'q' to quit): ")
+    baby_dob = user_input("Baby DOB (YYYY-MM-DD) (or type 'q' to quit): ")
 
     try:
         baby_age_months = calculate_age_months(baby_dob)
@@ -63,8 +72,8 @@ def add_new_user():
         print("Invalid date format. Please use YYYY-MM-DD.")
         return False
 
-    birth_weight = input("Birth Weight (kg or lbs): ").strip()
-    birth_height = input("Birth Height (cm or inches): ").strip()
+    birth_weight = user_input("Birth Weight (kg) (or type 'q' to quit): ")
+    birth_height = user_input("Birth Height (cm) (or type 'q' to quit): ")
 
     new_row = [username, password, baby_name, baby_dob,
                str(baby_age_months), birth_weight, birth_height]
@@ -77,12 +86,12 @@ def add_new_user():
 def login():
     print("Please log in:")
 
-    username = input("Username: ").strip()
+    username = user_input("Username (or type 'q' to quit): ")
     if not is_username_taken(username):
         print("Username not found. Please register first.")
         return False
 
-    password = input("Password: ").strip()
+    password = user_input("Password (or type 'q' to quit): ")
     if verify_password(username, password):
         return True
     else:
@@ -94,12 +103,12 @@ def login():
 def log_daily_baby_data():
     print("\n--- Log Daily Baby Data ---")
 
-    username = input("Enter your username: ").strip()
+    username = user_input("Enter your username (or type 'q' to quit): ")
     if not is_username_taken(username):
         print("Username not found. Please register first.")
         return
 
-    date = input("Date (YYYY-MM-DD): ").strip()
+    date = user_input("Date (YYYY-MM-DD) (or type 'q' to quit): ")
     try:
         datetime.strptime(date, "%Y-%m-%d")
     except ValueError:
@@ -107,10 +116,10 @@ def log_daily_baby_data():
         return
 
     try:
-        sleep_hours = float(input("Sleep (hours): "))
-        feed_ml = float(input("Feed (ml): "))
-        wet_diapers = int(input("Wet Diapers: "))
-        dirty_diapers = int(input("Dirty Diapers: "))
+        sleep_hours = float(user_input("Sleep (hours): "))
+        feed_ml = float(user_input("Feed (ml): "))
+        wet_diapers = int(user_input("Wet Diapers: "))
+        dirty_diapers = int(user_input("Dirty Diapers: "))
     except ValueError:
         print("Please enter numeric values.")
         return
@@ -125,13 +134,13 @@ def log_daily_baby_data():
 def update_log_date():
     print("\n--- Update Daily Log Date ---")
 
-    username = input("Enter your username: ").strip()
+    username = user_input("Enter your username (or type 'q' to quit): ")
     if not is_username_taken(username):
         print("Username not found.")
         return
 
-    old_date = input("Enter the incorrect date (YYYY-MM-DD): ").strip()
-    new_date = input("Enter the correct date (YYYY-MM-DD): ").strip()
+    old_date = user_input("Enter the incorrect date (YYYY-MM-DD): ")
+    new_date = user_input("Enter the correct date (YYYY-MM-DD): ")
 
     try:
         datetime.strptime(old_date, "%Y-%m-%d")
@@ -158,12 +167,12 @@ def update_log_date():
 def log_growth_data():
     print("\n--- Log Growth Data ---")
 
-    username = input("Enter your username: ").strip()
+    username = user_input("Enter your username (or type 'q' to quit): ")
     if not is_username_taken(username):
         print("Username not found.")
         return
 
-    date = input("Date (YYYY-MM-DD): ").strip()
+    date = user_input("Date (YYYY-MM-DD) (or type 'q' to quit): ")
     try:
         datetime.strptime(date, "%Y-%m-%d")
     except ValueError:
@@ -171,8 +180,8 @@ def log_growth_data():
         return
 
     try:
-        weight = float(input("Weight (kg): "))
-        height = float(input("Height (cm): "))
+        weight = float(user_input("Weight (kg): "))
+        height = float(user_input("Height (cm): "))
     except ValueError:
         print("Please enter numeric values.")
         return
@@ -186,19 +195,19 @@ def log_growth_data():
 def log_milestones():
     print("\n--- Log Baby Milestone ---")
 
-    username = input("Enter your username: ").strip()
+    username = user_input("Enter your username (or type 'q' to quit): ")
     if not is_username_taken(username):
         print("Username not found.")
         return
 
-    date = input("Date (YYYY-MM-DD): ").strip()
+    date = user_input("Date (YYYY-MM-DD) (or type 'q' to quit): ")
     try:
         datetime.strptime(date, "%Y-%m-%d")
     except ValueError:
         print("Invalid date format.")
         return
 
-    milestone = input("Describe the milestone: ").strip()
+    milestone = user_input("Describe the milestone (or type 'q' to quit): ")
 
     new_row = [username, date, milestone]
     milestones.append_row(new_row)
@@ -209,10 +218,8 @@ def log_milestones():
 def update_summary():
     print("\n--- Updating summary sheet ---")
 
-    # Clear the summary sheet before writing new data
     summary_sheet.clear()
 
-    # Write header row
     headers = ["Username", "Total Sleep This Week", "Average Feed (ml)",
                "Milestones Achieved", "Notes", "Latest Weight",
                "Latest Height"]
@@ -229,7 +236,6 @@ def update_summary():
     for user_row in user_rows:
         username = user_row[0]
 
-        # Calculate total sleep and average feed in last 7 days
         sleep_sum = 0
         feed_values = []
         for d_row in daily_rows:
@@ -245,7 +251,6 @@ def update_summary():
         avg_feed = round(sum(feed_values) / len(feed_values),
                          2) if feed_values else 0
 
-        # Count unique milestones, ignoring any with "none"
         user_milestones = set()
         for m in milestone_rows:
             if m[0] == username:
@@ -255,10 +260,8 @@ def update_summary():
 
         milestones_count = len(user_milestones)
 
-        # Notes (empty for now)
         notes = ""
 
-        # Get latest weight and height from growth sheet
         user_growth = [g for g in growth_rows if g[0] == username]
         latest_weight = ""
         latest_height = ""
@@ -290,14 +293,14 @@ def main():
         print("2. Returning User (Login)")
         print("3. Quit")
 
-        choice = input("Enter 1, 2, or 3: ").strip()
+        choice = user_input("Enter 1, 2, or 3: ")
 
         if choice == '1':
             if add_new_user():
                 print("\nRegistration successful! Moving to daily logs.")
                 log_daily_baby_data()
                 print("Thank you for logging your baby's data. Goodbye!")
-                return  # exit program after logging
+                return
             else:
                 print("Registration failed. Try again.")
         elif choice == '2':
@@ -312,7 +315,6 @@ def main():
         else:
             print("Invalid input. Please enter 1, 2, or 3.")
 
-    # Main app menu after login
     while True:
         print("\nChoose an option:")
         print("1. Log Daily Baby Data")
@@ -322,7 +324,7 @@ def main():
         print("5. Update Summary Sheet")
         print("6. Quit")
 
-        choice = input("Enter 1–6: ").strip()
+        choice = user_input("Enter 1–6: ")
 
         if choice == '1':
             log_daily_baby_data()
