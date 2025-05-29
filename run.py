@@ -21,12 +21,25 @@ milestones = SHEET.worksheet('milestones')
 summary_sheet = SHEET.worksheet('summary')
 
 
-def user_input(prompt):
-    prompt = prompt.rstrip(": ") + " (or type 'q' to quit, 'b' to go back): "
-    response = input(prompt).strip()
-    if response.lower() in ['q', 'quit', 'exit']:
+def user_input(prompt, allow_back=True, allow_quit=True):
+    suffix = ""
+    if allow_quit:
+        suffix += " (or type 'q' to quit"
+        if allow_back:
+            suffix += ", 'b' to go back): "
+        else:
+            suffix += "): "
+    else:
+        if allow_back:
+            suffix += " (or type 'b' to go back): "
+        else:
+            suffix += ": "
+    response = input(prompt.rstrip(": ") + suffix).strip()
+    if allow_quit and response.lower() in ['q', 'quit', 'exit']:
         print("Exiting the program. Goodbye!")
         sys.exit()
+    if allow_back and response.lower() == 'b':
+        return 'b'
     return response
 
 
@@ -52,7 +65,7 @@ def verify_password(username, password):
 def add_new_user():
     print("Add new user info:")
     while True:
-        username = user_input("Username")
+        username = user_input("Username", allow_back=False)
         if username.lower() == 'b':
             print("Cannot go back from username input here.")
             return False
@@ -63,13 +76,13 @@ def add_new_user():
 
     while True:
         password = user_input("Password")
-        if password.lower() == 'b':
+        if password == 'b':
             return add_new_user()
         baby_name = user_input("Baby Name")
-        if baby_name.lower() == 'b':
+        if baby_name == 'b':
             continue
         baby_dob = user_input("Baby DOB (YYYY-MM-DD)")
-        if baby_dob.lower() == 'b':
+        if baby_dob == 'b':
             continue
         try:
             baby_age_months = calculate_age_months(baby_dob)
@@ -77,10 +90,10 @@ def add_new_user():
             print("Invalid date format. Please use YYYY-MM-DD.")
             continue
         birth_weight = user_input("Birth Weight (kg)")
-        if birth_weight.lower() == 'b':
+        if birth_weight == 'b':
             continue
         birth_height = user_input("Birth Height (cm)")
-        if birth_height.lower() == 'b':
+        if birth_height == 'b':
             continue
         break
 
@@ -94,8 +107,8 @@ def add_new_user():
 def login():
     print("Please log in:")
     while True:
-        username = user_input("Username")
-        if username.lower() == 'b':
+        username = user_input("Username", allow_back=False, allow_quit=False)
+        if username == 'b':  # this won't happen because allow_back=False here
             return False
         if not is_username_taken(username):
             print("Username not found. Please register first.")
@@ -103,8 +116,8 @@ def login():
             break
 
     while True:
-        password = user_input("Password")
-        if password.lower() == 'b':
+        password = user_input("Password", allow_back=False, allow_quit=False)
+        if password == 'b':  # won't happen, no back allowed here
             return login()
         if verify_password(username, password):
             return True
@@ -117,7 +130,7 @@ def log_daily_baby_data():
 
     while True:
         username = user_input("Enter your username")
-        if username.lower() == 'b':
+        if username == 'b':
             return
         if not is_username_taken(username):
             print("Username not found. Please register first.")
@@ -126,7 +139,7 @@ def log_daily_baby_data():
 
     while True:
         date = user_input("Date (YYYY-MM-DD)")
-        if date.lower() == 'b':
+        if date == 'b':
             continue
         try:
             datetime.strptime(date, "%Y-%m-%d")
@@ -160,17 +173,17 @@ def update_log_date():
     print("\n--- Update Daily Log Date ---")
 
     username = user_input("Enter your username")
-    if username.lower() == 'b':
+    if username == 'b':
         return
     if not is_username_taken(username):
         print("Username not found.")
         return
 
     old_date = user_input("Enter the incorrect date (YYYY-MM-DD)")
-    if old_date.lower() == 'b':
+    if old_date == 'b':
         return
     new_date = user_input("Enter the correct date (YYYY-MM-DD)")
-    if new_date.lower() == 'b':
+    if new_date == 'b':
         return
 
     try:
@@ -197,14 +210,14 @@ def log_growth_data():
     print("\n--- Log Growth Data ---")
 
     username = user_input("Enter your username")
-    if username.lower() == 'b':
+    if username == 'b':
         return
     if not is_username_taken(username):
         print("Username not found.")
         return
 
     date = user_input("Date (YYYY-MM-DD)")
-    if date.lower() == 'b':
+    if date == 'b':
         return
     try:
         datetime.strptime(date, "%Y-%m-%d")
@@ -228,14 +241,14 @@ def log_milestones():
     print("\n--- Log Baby Milestone ---")
 
     username = user_input("Enter your username")
-    if username.lower() == 'b':
+    if username == 'b':
         return
     if not is_username_taken(username):
         print("Username not found.")
         return
 
     date = user_input("Date (YYYY-MM-DD)")
-    if date.lower() == 'b':
+    if date == 'b':
         return
     try:
         datetime.strptime(date, "%Y-%m-%d")
@@ -244,7 +257,7 @@ def log_milestones():
         return
 
     milestone = user_input("Describe the milestone")
-    if milestone.lower() == 'b':
+    if milestone == 'b':
         return
 
     new_row = [username, date, milestone]
@@ -289,42 +302,58 @@ def update_summary():
         )
 
         user_milestones = set()
-        for m in milestone_rows:
-            if m[0] == username:
-                milestone_text = m[2].strip().lower()
-                if milestone_text and "none" not in milestone_text:
-                    user_milestones.add(milestone_text)
+        for m_row in milestone_rows:
+            if m_row[0] == username:
+                user_milestones.add(m_row[2])
 
-        milestones_count = len(user_milestones)
-        notes = ""
-        user_growth = [g for g in growth_rows if g[0] == username]
-        latest_weight = ""
-        latest_height = ""
-        if user_growth:
-            user_growth.sort(
-                key=lambda x: datetime.strptime(x[1], "%Y-%m-%d"),
-                reverse=True
-            )
+        latest_weight = None
+        latest_height = None
+        latest_date = None
+        for g_row in growth_rows:
+            if g_row[0] == username:
+                try:
+                    g_date = datetime.strptime(g_row[1], "%Y-%m-%d")
+                except ValueError:
+                    continue
+                if (latest_date is None) or (g_date > latest_date):
+                    latest_date = g_date
+                    latest_weight = g_row[2]
+                    latest_height = g_row[3]
 
-            latest_weight = user_growth[0][2]
-            latest_height = user_growth[0][3]
+        notes = ""  # Placeholder for any notes, can be extended later
 
-        new_summary_row = [username, sleep_sum, avg_feed, milestones_count,
-                           notes, latest_weight, latest_height]
-        summary_sheet.append_row(new_summary_row)
+        summary_row = [
+            username,
+            sleep_sum,
+            avg_feed,
+            len(user_milestones),
+            notes,
+            latest_weight or "",
+            latest_height or ""
+        ]
 
-    print("✅ Summary sheet updated!")
+        summary_sheet.append_row(summary_row)
+
+    print("✅ Summary updated successfully!")
 
 
 def main():
-    print("\nWelcome to Simple Baby Tracker")
+    print("\n👶🏼 Welcome to Simple Baby Tracker")
     print(
         "This app is designed for parents to track their baby's data "
         "up to 2 years of age."
-    )
+        )
     print(
         "You can log daily activities, growth, and developmental "
         "milestones."
+    )
+    print(
+        "\n🔹 Tip: Type 'q' at any point to quit, or 'b' to go back and "
+        "correct a previous input or review what you entered."
+    )
+    print(
+        "\n🔴 Once registered, "
+        "you can simply log in to access and view your data."
     )
 
     while True:
@@ -333,7 +362,11 @@ def main():
         print("2. Returning User (Login)")
         print("3. Quit")
 
-        choice = user_input("Enter 1, 2, or 3")
+        choice = user_input(
+            "Enter 1, 2, or 3",
+            allow_back=False,
+            allow_quit=False
+        )
 
         if choice == '1':
             if add_new_user():
@@ -364,7 +397,7 @@ def main():
         print("5. Update Summary Sheet")
         print("6. Quit")
 
-        choice = user_input("Enter 1–6")
+        choice = user_input("Enter 1–6", allow_back=False, allow_quit=False)
 
         if choice == '1':
             log_daily_baby_data()
