@@ -24,6 +24,9 @@ summary_sheet = SHEET.worksheet('summary')
 
 # --- Helper Functions ---
 def user_input(prompt):
+    # Automatically add quit hint if not already included
+    if "q" not in prompt.lower():
+        prompt = prompt.rstrip(": ") + " (or type 'q' to quit): "
     response = input(prompt).strip()
     if response.lower() in ['q', 'quit', 'exit']:
         print("Exiting the program. Goodbye!")
@@ -39,12 +42,12 @@ def calculate_age_months(dob_str):
 
 
 def is_username_taken(username):
-    all_usernames = user_info.col_values(1)  # first column = Username
+    all_usernames = user_info.col_values(1)
     return username in all_usernames
 
 
 def verify_password(username, password):
-    records = user_info.get_all_values()[1:]  # skip header
+    records = user_info.get_all_values()[1:]
     for row in records:
         if row[0] == username and row[1] == password:
             return True
@@ -56,15 +59,15 @@ def add_new_user():
     print("Add new user info:")
 
     while True:
-        username = user_input("Username (or type 'q' to quit): ")
+        username = user_input("Username: ")
         if is_username_taken(username):
             print("Username already taken. Please try another.")
         else:
             break
 
-    password = user_input("Password (or type 'q' to quit): ")
-    baby_name = user_input("Baby Name (or type 'q' to quit): ")
-    baby_dob = user_input("Baby DOB (YYYY-MM-DD) (or type 'q' to quit): ")
+    password = user_input("Password: ")
+    baby_name = user_input("Baby Name: ")
+    baby_dob = user_input("Baby DOB (YYYY-MM-DD): ")
 
     try:
         baby_age_months = calculate_age_months(baby_dob)
@@ -72,8 +75,8 @@ def add_new_user():
         print("Invalid date format. Please use YYYY-MM-DD.")
         return False
 
-    birth_weight = user_input("Birth Weight (kg) (or type 'q' to quit): ")
-    birth_height = user_input("Birth Height (cm) (or type 'q' to quit): ")
+    birth_weight = user_input("Birth Weight (kg): ")
+    birth_height = user_input("Birth Height (cm): ")
 
     new_row = [username, password, baby_name, baby_dob,
                str(baby_age_months), birth_weight, birth_height]
@@ -86,12 +89,12 @@ def add_new_user():
 def login():
     print("Please log in:")
 
-    username = user_input("Username (or type 'q' to quit): ")
+    username = user_input("Username: ")
     if not is_username_taken(username):
         print("Username not found. Please register first.")
         return False
 
-    password = user_input("Password (or type 'q' to quit): ")
+    password = user_input("Password: ")
     if verify_password(username, password):
         return True
     else:
@@ -103,12 +106,12 @@ def login():
 def log_daily_baby_data():
     print("\n--- Log Daily Baby Data ---")
 
-    username = user_input("Enter your username (or type 'q' to quit): ")
+    username = user_input("Enter your username: ")
     if not is_username_taken(username):
         print("Username not found. Please register first.")
         return
 
-    date = user_input("Date (YYYY-MM-DD) (or type 'q' to quit): ")
+    date = user_input("Date (YYYY-MM-DD): ")
     try:
         datetime.strptime(date, "%Y-%m-%d")
     except ValueError:
@@ -134,7 +137,7 @@ def log_daily_baby_data():
 def update_log_date():
     print("\n--- Update Daily Log Date ---")
 
-    username = user_input("Enter your username (or type 'q' to quit): ")
+    username = user_input("Enter your username: ")
     if not is_username_taken(username):
         print("Username not found.")
         return
@@ -152,7 +155,7 @@ def update_log_date():
     records = daily_logs.get_all_values()
     updated = False
 
-    for i, row in enumerate(records[1:], start=2):  # skip header
+    for i, row in enumerate(records[1:], start=2):
         if row[0] == username and row[1] == old_date:
             daily_logs.update_cell(i, 2, new_date)
             updated = True
@@ -167,12 +170,12 @@ def update_log_date():
 def log_growth_data():
     print("\n--- Log Growth Data ---")
 
-    username = user_input("Enter your username (or type 'q' to quit): ")
+    username = user_input("Enter your username: ")
     if not is_username_taken(username):
         print("Username not found.")
         return
 
-    date = user_input("Date (YYYY-MM-DD) (or type 'q' to quit): ")
+    date = user_input("Date (YYYY-MM-DD): ")
     try:
         datetime.strptime(date, "%Y-%m-%d")
     except ValueError:
@@ -195,19 +198,19 @@ def log_growth_data():
 def log_milestones():
     print("\n--- Log Baby Milestone ---")
 
-    username = user_input("Enter your username (or type 'q' to quit): ")
+    username = user_input("Enter your username: ")
     if not is_username_taken(username):
         print("Username not found.")
         return
 
-    date = user_input("Date (YYYY-MM-DD) (or type 'q' to quit): ")
+    date = user_input("Date (YYYY-MM-DD): ")
     try:
         datetime.strptime(date, "%Y-%m-%d")
     except ValueError:
         print("Invalid date format.")
         return
 
-    milestone = user_input("Describe the milestone (or type 'q' to quit): ")
+    milestone = user_input("Describe the milestone: ")
 
     new_row = [username, date, milestone]
     milestones.append_row(new_row)
@@ -228,7 +231,7 @@ def update_summary():
     today = datetime.today()
     week_ago = today - timedelta(days=7)
 
-    user_rows = user_info.get_all_values()[1:]  # skip header
+    user_rows = user_info.get_all_values()[1:]
     daily_rows = daily_logs.get_all_values()[1:]
     milestone_rows = milestones.get_all_values()[1:]
     growth_rows = growth.get_all_values()[1:]
