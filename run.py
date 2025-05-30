@@ -348,8 +348,11 @@ def update_summary():
 
 
 def main():
+    print(
+        "\n________________________________________________________________"
+        )
     print("\n                          Welcome to Simple Baby Tracker!")
-    print("\n________________________________________________________________")
+
     print(
         "\n⭐ This app is designed for parents to track their baby's data "
         "up to age 2."
@@ -361,9 +364,7 @@ def main():
     print(
         "\n📊 Get weekly summaries to monitor progress and patterns."
     )
-    print(
-        "\n👶 Let's start tracking your little one's amazing progress!"
-    )
+    print("\n👶 Let's start tracking your little one's amazing progress!")
     print("\n________________________________________________________________")
 
     while True:
@@ -376,6 +377,9 @@ def main():
             "Enter 1, 2, or 3",
             allow_back=False,
             allow_quit=False
+        )
+        print(
+              "\n____________________________________________________________"
         )
 
         if choice == '1':
