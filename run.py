@@ -116,7 +116,6 @@ def add_new_user():
                str(baby_age_months), birth_weight, birth_height]
     user_info.append_row(new_row)
 
-    # New greeting and message after registration:
     print(f"\nHello, {username}! 🎉")
     print("After you have entered the details about your baby, "
           "let's record the baby's steps.\n")
@@ -128,7 +127,7 @@ def login():
     print("Please log in:")
     while True:
         username = user_input("Username", allow_back=False, allow_quit=False)
-        if username == 'b':  # this won't happen because allow_back=False here
+        if username == 'b':
             return False
         if not is_username_taken(username):
             print("Username not found. Please register first.")
@@ -137,10 +136,10 @@ def login():
 
     while True:
         password = user_input("Password", allow_back=False, allow_quit=False)
-        if password == 'b':  # won't happen, no back allowed here
+        if password == 'b':
             return login()
         if verify_password(username, password):
-            print(f"\nHello,{username}, welcome back!\n")
+            print(f"\nHello,{username}, welcome back!")
             return True
         else:
             print("Incorrect password.")
@@ -188,43 +187,6 @@ def log_daily_baby_data():
 
     daily_logs.append_row(new_row)
     print("✅ Daily log saved successfully!")
-
-
-def update_log_date():
-    print("\n--- Update Daily Log Date ---")
-
-    username = user_input("Enter your username")
-    if username == 'b':
-        return
-    if not is_username_taken(username):
-        print("Username not found.")
-        return
-
-    old_date = user_input("Enter the incorrect date (YYYY-MM-DD)")
-    if old_date == 'b':
-        return
-    new_date = user_input("Enter the correct date (YYYY-MM-DD)")
-    if new_date == 'b':
-        return
-
-    try:
-        datetime.strptime(old_date, "%Y-%m-%d")
-        datetime.strptime(new_date, "%Y-%m-%d")
-    except ValueError:
-        print("Invalid date format. Please use YYYY-MM-DD.")
-        return
-
-    records = daily_logs.get_all_values()
-    updated = False
-    for i, row in enumerate(records[1:], start=2):
-        if row[0] == username and row[1] == old_date:
-            daily_logs.update_cell(i, 2, new_date)
-            updated = True
-            print(f"✅ Updated date from {old_date} to {new_date} in row {i}.")
-            break
-
-    if not updated:
-        print("❌ No matching record found.")
 
 
 def log_growth_data():
@@ -411,29 +373,26 @@ def main():
     while True:
         print("\nChoose an option:")
         print("1. Log Daily Baby Data")
-        print("2. Update Daily Log Date")
-        print("3. Log Growth Data")
-        print("4. Log Milestones")
-        print("5. Update Summary Sheet")
-        print("6. Quit")
+        print("2. Log Growth Data")
+        print("3. Log Milestones")
+        print("4. Summary Sheet")
+        print("5. Quit")
 
-        choice = user_input("Enter 1–6", allow_back=False, allow_quit=False)
+        choice = user_input("Enter 1–5", allow_back=False, allow_quit=False)
 
         if choice == '1':
             log_daily_baby_data()
         elif choice == '2':
-            update_log_date()
-        elif choice == '3':
             log_growth_data()
-        elif choice == '4':
+        elif choice == '3':
             log_milestones()
-        elif choice == '5':
+        elif choice == '4':
             update_summary()
-        elif choice == '6':
+        elif choice == '5':
             print("Goodbye!")
             break
         else:
-            print("Invalid option. Please enter a number between 1 and 6.")
+            print("Invalid option. Please enter a number between 1 and 5.")
 
 
 if __name__ == "__main__":
