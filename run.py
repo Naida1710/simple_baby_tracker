@@ -80,7 +80,7 @@ def add_new_user():
     print("Let's begin!\n")
 
     while True:
-        username = user_input("Username", allow_back=False)
+        username = user_input("Username", allow_back=False, allow_quit=True)
         if username.lower() == 'b':
             print("Cannot go back from username input here.")
             return False
@@ -90,7 +90,7 @@ def add_new_user():
             break
 
     while True:
-        password = user_input("Password")
+        password = user_input("Password", allow_back=False, allow_quit=True)
         if password == 'b':
             return add_new_user()
         baby_name = user_input("Baby Name")
@@ -126,7 +126,7 @@ def add_new_user():
 def login():
     print("Please log in:")
     while True:
-        username = user_input("Username", allow_back=False, allow_quit=False)
+        username = user_input("Username", allow_back=False, allow_quit=True)
         if username == 'b':
             return False
         if not is_username_taken(username):
@@ -135,7 +135,7 @@ def login():
             break
 
     while True:
-        password = user_input("Password", allow_back=False, allow_quit=False)
+        password = user_input("Password", allow_back=False, allow_quit=True)
         if password == 'b':
             return login()
         if verify_password(username, password):
