@@ -338,13 +338,14 @@ def update_summary():
 
 
 def main():
-    print("\n👶🏼 Welcome to Simple Baby Tracker")
+    print("\n                          Welcome to Simple Baby Tracker!")
+    print("\n________________________________________________________________")
     print(
-        "This app is designed for parents to track their baby's data "
-        "up to 2 years of age."
+        "\n⭐ This app is designed for parents to track their baby's data "
+        "up to age 2."
         )
     print(
-        "You can log daily activities, growth, and developmental "
+        "\n💚 Log daily activities, growth, and developmental "
         "milestones."
     )
     print(
