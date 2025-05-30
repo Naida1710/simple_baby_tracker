@@ -63,7 +63,22 @@ def verify_password(username, password):
 
 
 def add_new_user():
-    print("Add new user info:")
+    print("\n👋 Welcome, new user! Let's get you set up.")
+    print("We’ll ask a few quick questions to register you and your baby.")
+    print(
+        "Make sure you have your baby's date of birth "
+        "and birth stats ready."
+    )
+    print(
+        "Type 'q' at any point to quit, or 'b' to go back and "
+        "correct a previous input or review what you entered."
+    )
+    print(
+        "Once registered, "
+        "you can simply log in to access and view your data."
+    )
+    print("Let's begin!\n")
+
     while True:
         username = user_input("Username", allow_back=False)
         if username.lower() == 'b':
@@ -349,12 +364,10 @@ def main():
         "milestones."
     )
     print(
-        "\n🔹 Tip: Type 'q' at any point to quit, or 'b' to go back and "
-        "correct a previous input or review what you entered."
+        "\n📊 Get weekly summaries to monitor progress and patterns."
     )
     print(
-        "\n🔴 Once registered, "
-        "you can simply log in to access and view your data."
+        "\n👶 Let's start tracking your little one's amazing progress!"
     )
 
     while True:
