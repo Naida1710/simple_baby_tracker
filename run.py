@@ -115,7 +115,12 @@ def add_new_user():
     new_row = [username, password, baby_name, baby_dob,
                str(baby_age_months), birth_weight, birth_height]
     user_info.append_row(new_row)
-    print("User added successfully!")
+
+    # New greeting and message after registration:
+    print(f"\nHello, {username}! 🎉")
+    print("After you have entered the details about your baby, "
+          "let's record the baby's steps.\n")
+
     return True
 
 
@@ -135,6 +140,7 @@ def login():
         if password == 'b':  # won't happen, no back allowed here
             return login()
         if verify_password(username, password):
+            print(f"\nHello,{username}, welcome back!\n")
             return True
         else:
             print("Incorrect password.")
