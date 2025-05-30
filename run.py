@@ -140,7 +140,7 @@ def login():
             return login()
         if verify_password(username, password):
             print(f"\nHello,{username}, welcome back!")
-            return True
+            return username
         else:
             print("Incorrect password.")
 
@@ -218,6 +218,33 @@ def log_growth_data():
     new_row = [username, date, weight, height]
     growth.append_row(new_row)
     print("✅ Growth data logged successfully!")
+
+
+def show_user_profile(username):
+    print("\n--- Your Profile ---")
+    records = user_info.get_all_values()[1:]
+    for row in records:
+        if row[0] == username:
+            print(f"Username: {row[0]}")
+            print(f"Baby Name: {row[2]}")
+            print(f"Date of Birth: {row[3]}")
+            print(f"Age (months): {row[4]}")
+            print(f"Birth Weight: {row[5]} kg")
+            print(f"Birth Height: {row[6]} cm")
+            return
+    print("Profile not found.")
+
+
+def display_user_summary(username):
+    print("\n--- Your Summary ---")
+    summary_rows = summary_sheet.get_all_values()
+    headers = summary_rows[0]
+    for row in summary_rows[1:]:
+        if row[0] == username:
+            for i, value in enumerate(row):
+                print(f"{headers[i]}: {value}")
+            return
+    print("No summary data found.")
 
 
 def log_milestones():
@@ -337,6 +364,7 @@ def main():
     print(
         "\n👶 Let's start tracking your little one's amazing progress!"
     )
+    print("\n________________________________________________________________")
 
     while True:
         print("\nAre you a new user or returning user?")
@@ -359,7 +387,11 @@ def main():
             else:
                 print("Registration failed. Try again.")
         elif choice == '2':
-            if login():
+            logged_in_user = login()
+            if logged_in_user:
+                show_user_profile(logged_in_user)
+                update_summary()
+                display_user_summary(logged_in_user)
                 print("Login successful! Accessing main menu...")
                 break
             else:
