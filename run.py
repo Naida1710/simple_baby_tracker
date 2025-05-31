@@ -314,30 +314,67 @@ def log_daily_baby_data():
 def log_growth_data():
     print("\n--- Log Growth Data ---")
 
-    username = user_input("Enter your username")
-    if username == 'b':
-        return
+    username = user_input("Enter your username", allow_back=False)
     if not is_username_taken(username):
-        print(Fore.RED + "Username not found." + Style.RESET_ALL)
+        print(
+            Fore.RED
+            + "Username not found. Please try again."
+            + Style.RESET_ALL
+        )
         return
 
-    date = user_input("Date (YYYY-MM-DD)")
-    if date == 'b':
-        return
-    try:
-        datetime.strptime(date, "%Y-%m-%d")
-    except ValueError:
-        print(Fore.RED + "Invalid date format." + Style.RESET_ALL)
-        return
+    steps = [
+        {"key": "date", "prompt": "Date (YYYY-MM-DD)"},
+        {"key": "weight", "prompt": "Weight (kg)"},
+        {"key": "height", "prompt": "Height (cm)"},
+    ]
 
-    try:
-        weight = float(user_input("Weight (kg)"))
-        height = float(user_input("Height (cm)"))
-    except ValueError:
-        print(Fore.RED + "Please enter numeric values." + Style.RESET_ALL)
-        return
+    data = {}
+    current_step = 0
 
-    new_row = [username, date, weight, height]
+    while current_step < len(steps):
+        step = steps[current_step]
+        key = step["key"]
+        prompt = step["prompt"]
+
+        response = user_input(prompt, allow_back=True)
+
+        if response == 'b':
+            if current_step == 0:
+                username = user_input("Enter your username", allow_back=False)
+                if not is_username_taken(username):
+                    print(Fore.RED + "Username not found." + Style.RESET_ALL)
+                    # stay on username input
+                    continue
+                data = {}
+                current_step = 0
+                continue
+            else:
+                current_step -= 1
+                continue
+
+        if key == "date":
+            try:
+                datetime.strptime(response, "%Y-%m-%d")
+            except ValueError:
+                print(Fore.RED + "Invalid date format." + Style.RESET_ALL)
+                continue
+        elif key in ["weight", "height"]:
+            try:
+                float(response)
+            except ValueError:
+                print(
+                    Fore.RED
+                    + "Please enter numeric values."
+                    + Style.RESET_ALL
+                )
+                continue
+
+        data[key] = response
+        current_step += 1
+
+    new_row = [username, data["date"],
+               float(data["weight"]), float(data["height"])]
     growth.append_row(new_row)
     print(Fore.GREEN + "✅ Growth data logged successfully!" + Style.RESET_ALL)
 
@@ -528,11 +565,15 @@ def main():
             if add_new_user():
                 log_daily_baby_data()
                 log_growth_data()
+                log_milestones()
                 print(
                     Fore.BLUE
-                    + "Thank you for logging your baby's data and growth info. Goodbye!"
+                    + "Thank you for logging your baby's data, "
+                    + "growth, and milestones. "
+                    + "Goodbye!"
                     + Style.RESET_ALL
                 )
+
                 return
             else:
                 print(
