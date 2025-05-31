@@ -38,7 +38,7 @@ def user_input(prompt, allow_back=True, allow_quit=True):
             suffix += ": "
     response = input(prompt.rstrip(": ") + suffix).strip()
     if allow_quit and response.lower() in ['q', 'quit', 'exit']:
-        print(Fore.CYAN + "Exiting the program. Goodbye!" + Style.RESET_ALL)
+        print(Fore.BLUE + "Exiting the program. Goodbye!" + Style.RESET_ALL)
         sys.exit()
     if allow_back and response.lower() == 'b':
         return 'b'
@@ -171,11 +171,11 @@ def add_new_user():
     user_info.append_row(new_row)
 
     print(Fore.GREEN + "\n✅ Registration successful!" + Style.RESET_ALL)
-    print(f"\nHello, {data['username']}! 🎉")
+    print(Fore.CYAN + f"\nHello, {data['username']}! 🎉" + Style.RESET_ALL)
     print(
         Fore.CYAN
-        + "Once you've entered the details about your baby, "
-          "let's move to daily logs. "
+        + "Now that you've entered the details about your baby, "
+          "we can move on to daily logs. "
           + Style.RESET_ALL
     )
 
@@ -480,11 +480,6 @@ def main():
 
         if choice == '1':
             if add_new_user():
-                print(
-                    Fore.GREEN
-                    + "Registration successful!"
-                    + Style.RESET_ALL
-                    )
                 log_daily_baby_data()
                 print(
                     Fore.BLUE
@@ -517,7 +512,7 @@ def main():
                     + Style.RESET_ALL
                     )
         elif choice == '3':
-            print(Fore.BLUE + "GODDBYE!" + Style.RESET_ALL)
+            print(Fore.BLUE + "GOODBYE!" + Style.RESET_ALL)
             return
         else:
             print(
