@@ -264,7 +264,7 @@ def log_daily_baby_data():
             if not is_username_taken(response):
                 print(
                     Fore.RED
-                    + "Username not found. Please register first."
+                    + "Username not found. Please try again."
                     + Style.RESET_ALL
                 )
                 continue
@@ -376,7 +376,7 @@ def log_growth_data():
     new_row = [username, data["date"],
                float(data["weight"]), float(data["height"])]
     growth.append_row(new_row)
-    print(Fore.GREEN + "✅ Growth data logged successfully!" + Style.RESET_ALL)
+    print(Fore.GREEN + "✅ Growth data saved successfully!" + Style.RESET_ALL)
 
 
 def show_user_profile(username):
@@ -457,7 +457,7 @@ def log_milestones():
 
     new_row = [username, data["date"], data["milestone"]]
     milestones.append_row(new_row)
-    print(Fore.GREEN + "🎉 Milestone logged successfully!" + Style.RESET_ALL)
+    print(Fore.GREEN + "\n✅ Milestone saved successfully!" + Style.RESET_ALL)
 
 
 def update_summary():
@@ -646,10 +646,9 @@ def main():
         print("1. Log Daily Baby Data")
         print("2. Log Growth Data")
         print("3. Log Milestones")
-        print("4. Summary Sheet")
-        print("5. Quit")
+        print("4. Quit")
 
-        choice = user_input("Enter 1–5", allow_back=False, allow_quit=False)
+        choice = user_input("Enter 1–4", allow_back=False, allow_quit=False)
 
         if choice == '1':
             log_daily_baby_data()
@@ -658,8 +657,6 @@ def main():
         elif choice == '3':
             log_milestones()
         elif choice == '4':
-            update_summary()
-        elif choice == '5':
             print(Fore.BLUE + "GOODBYE!" + Style.RESET_ALL)
             break
         else:
