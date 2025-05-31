@@ -65,8 +65,13 @@ def verify_password(username, password):
 
 
 def add_new_user():
+    print(
+        Fore.CYAN
+        + "\n________________________________________________________________"
+        + Style.RESET_ALL
+    )
     print(Fore.YELLOW + "\n👋 Welcome, new user!" + Style.RESET_ALL)
-    print(Fore.YELLOW + "Let's get you set up." + Style.RESET_ALL)
+    print(Fore.YELLOW + "\n🍼 Let's get you set up." + Style.RESET_ALL)
     print(
         Fore.YELLOW
         + "We’ll ask a few quick questions to register you and your baby."
@@ -77,17 +82,22 @@ def add_new_user():
         "and birth stats ready." + Style.RESET_ALL)
     print(
         Fore.YELLOW
-        + "Type 'q' at any point to quit, or 'b' to go back and "
-        "correct a previous input or review what you entered."
+        + "Type 'q' to quit at any point, or 'b' to go back to "
+        "a prior input."
         + Style.RESET_ALL
         )
     print(
         Fore.YELLOW
         + "Once registered, "
-        "you can simply log in to access and view your data."
+        "you can simply log in to access your data."
         + Style.RESET_ALL
         )
-    print(Fore.YELLOW + "\n🍼 Let's begin!" + Style.RESET_ALL)
+    print(Fore.YELLOW + "\n🎬 Let's begin!" + Style.RESET_ALL)
+    print(
+        Fore.CYAN
+        + "\n________________________________________________________________"
+        + Style.RESET_ALL
+    )
 
     while True:
         username = user_input("Username", allow_back=False, allow_quit=True)
@@ -376,18 +386,18 @@ def update_summary():
 
 def main():
     print(
-        Fore.YELLOW +
-        "\n________________________________________________________________"
+        Fore.CYAN +
+        "\n___________________________________________________________________"
         + Style.RESET_ALL
     )
     print(
         Fore.YELLOW
-        + "\n                          Welcome to Simple Baby Tracker!"
+        + "\n                WELCOME TO SIMPLE BABY TRACKER!"
         + Style.RESET_ALL
     )
     print(
         Fore.YELLOW
-        + "\n⭐ This app is designed for parents to track their baby's data "
+        + "\n⭐ This app helps parents track their baby's data "
         "up to age 2."
         + Style.RESET_ALL
     )
@@ -408,13 +418,17 @@ def main():
         + Style.RESET_ALL
     )
     print(
-        Fore.YELLOW
+        Fore.CYAN
         + "\n________________________________________________________________"
         + Style.RESET_ALL
     )
 
     while True:
-        print("\nAre you a new user or returning user?")
+        print(
+            Fore.CYAN
+            + "Are you a new user or returning user?"
+            + Style.RESET_ALL
+        )
         print("1. New User (Register)")
         print("2. Returning User (Login)")
         print("3. Quit")
@@ -423,9 +437,6 @@ def main():
             "Enter 1, 2, or 3",
             allow_back=False,
             allow_quit=False
-        )
-        print(
-              "\n____________________________________________________________"
         )
 
         if choice == '1':
@@ -467,7 +478,7 @@ def main():
                     + Style.RESET_ALL
                     )
         elif choice == '3':
-            print("Goodbye!")
+            print(Fore.BLUE + "GODDBYE!" + Style.RESET_ALL)
             return
         else:
             print(
@@ -475,6 +486,12 @@ def main():
                 + "Invalid input. Please enter 1, 2, or 3."
                 + Style.RESET_ALL
                 )
+
+        print(
+            Fore.CYAN
+            + "\n____________________________________________________________"
+            + Style.RESET_ALL
+        )
 
     while True:
         print("\nChoose an option:")
@@ -495,7 +512,7 @@ def main():
         elif choice == '4':
             update_summary()
         elif choice == '5':
-            print("Goodbye!")
+            print(Fore.BLUE + "GOODBYE!" + Style.RESET_ALL)
             break
         else:
             print(
