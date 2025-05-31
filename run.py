@@ -38,7 +38,7 @@ def user_input(prompt, allow_back=True, allow_quit=True):
             suffix += ": "
     response = input(prompt.rstrip(": ") + suffix).strip()
     if allow_quit and response.lower() in ['q', 'quit', 'exit']:
-        print("Exiting the program. Goodbye!")
+        print(Fore.CYAN + "Exiting the program. Goodbye!" + Style.RESET_ALL)
         sys.exit()
     if allow_back and response.lower() == 'b':
         return 'b'
@@ -65,22 +65,29 @@ def verify_password(username, password):
 
 
 def add_new_user():
-    print("\n👋 Welcome, new user!")
-    print("Let's get you set up.")
-    print("We’ll ask a few quick questions to register you and your baby.")
+    print(Fore.YELLOW + "\n👋 Welcome, new user!" + Style.RESET_ALL)
+    print(Fore.YELLOW + "Let's get you set up." + Style.RESET_ALL)
     print(
-        "Make sure you have your baby's date of birth "
-        "and birth stats ready."
+        Fore.YELLOW
+        + "We’ll ask a few quick questions to register you and your baby."
+        + Style.RESET_ALL
     )
     print(
-        "Type 'q' at any point to quit, or 'b' to go back and "
+        Fore.YELLOW + "Make sure you have your baby's date of birth "
+        "and birth stats ready." + Style.RESET_ALL)
+    print(
+        Fore.YELLOW
+        + "Type 'q' at any point to quit, or 'b' to go back and "
         "correct a previous input or review what you entered."
-    )
+        + Style.RESET_ALL
+        )
     print(
-        "Once registered, "
+        Fore.YELLOW
+        + "Once registered, "
         "you can simply log in to access and view your data."
-    )
-    print("\n🍼 Let's begin!")
+        + Style.RESET_ALL
+        )
+    print(Fore.YELLOW + "\n🍼 Let's begin!" + Style.RESET_ALL)
 
     while True:
         username = user_input("Username", allow_back=False, allow_quit=True)
@@ -133,7 +140,11 @@ def login():
         if username == 'b':
             return False
         if not is_username_taken(username):
-            print("Username not found. Please register first.")
+            print(
+                Fore.RED
+                + "Username not found. Please register first."
+                + Style.RESET_ALL
+            )
         else:
             break
 
@@ -145,7 +156,11 @@ def login():
             print(f"\nHello,{username}, welcome back!")
             return username
         else:
-            print("Incorrect password.")
+            print(
+                Fore.RED
+                + "Incorrect password. Please try again."
+                + Style.RESET_ALL
+            )
 
 
 def log_daily_baby_data():
@@ -156,7 +171,11 @@ def log_daily_baby_data():
         if username == 'b':
             return
         if not is_username_taken(username):
-            print("Username not found. Please register first.")
+            print(
+                Fore.RED
+                + "Username not found. Please register first."
+                + Style.RESET_ALL
+            )
         else:
             break
 
@@ -167,7 +186,7 @@ def log_daily_baby_data():
         try:
             datetime.strptime(date, "%Y-%m-%d")
         except ValueError:
-            print("Invalid date format.")
+            print(Fore.RED + "Invalid date format." + Style.RESET_ALL)
             continue
         try:
             sleep_hours = float(user_input("Sleep (hours)"))
@@ -189,7 +208,7 @@ def log_daily_baby_data():
     ]
 
     daily_logs.append_row(new_row)
-    print("✅ Daily log saved successfully!")
+    print(Fore.GREEN + "✅ Daily log saved successfully!" + Style.RESET_ALL)
 
 
 def log_growth_data():
@@ -220,7 +239,7 @@ def log_growth_data():
 
     new_row = [username, date, weight, height]
     growth.append_row(new_row)
-    print("✅ Growth data logged successfully!")
+    print(Fore.GREEN + "✅ Growth data logged successfully!" + Style.RESET_ALL)
 
 
 def show_user_profile(username):
@@ -266,7 +285,7 @@ def log_milestones():
     try:
         datetime.strptime(date, "%Y-%m-%d")
     except ValueError:
-        print("Invalid date format.")
+        print(Fore.RED + "Invalid date format." + Style.RESET_ALL)
         return
 
     milestone = user_input("Describe the milestone")
@@ -275,7 +294,7 @@ def log_milestones():
 
     new_row = [username, date, milestone]
     milestones.append_row(new_row)
-    print("🎉 Milestone logged successfully!")
+    print(Fore.GREEN + "🎉 Milestone logged successfully!" + Style.RESET_ALL)
 
 
 def update_summary():
@@ -333,7 +352,7 @@ def update_summary():
                     latest_weight = g_row[2]
                     latest_height = g_row[3]
 
-        notes = ""  # Placeholder for any notes, can be extended later
+        notes = ""
 
         summary_row = [
             username,
@@ -352,23 +371,42 @@ def update_summary():
 
 def main():
     print(
+        Fore.YELLOW +
         "\n________________________________________________________________"
-        )
-    print("\n                          Welcome to Simple Baby Tracker!")
-
+        + Style.RESET_ALL
+    )
     print(
-        "\n⭐ This app is designed for parents to track their baby's data "
+        Fore.YELLOW
+        + "\n                          Welcome to Simple Baby Tracker!"
+        + Style.RESET_ALL
+    )
+    print(
+        Fore.YELLOW
+        + "\n⭐ This app is designed for parents to track their baby's data "
         "up to age 2."
-        )
+        + Style.RESET_ALL
+    )
     print(
-        "\n💚 Log daily activities, growth, and developmental "
+        Fore.YELLOW
+        + "\n💚 Log daily activities, growth, and developmental "
         "milestones."
+        + Style.RESET_ALL
     )
     print(
-        "\n📊 Get weekly summaries to monitor progress and patterns."
+        Fore.YELLOW
+        + "\n📊 Get weekly summaries to monitor progress and patterns."
+        + Style.RESET_ALL
     )
-    print("\n👶 Let's start tracking your little one's amazing progress!")
-    print("\n________________________________________________________________")
+    print(
+        Fore.YELLOW
+        + "\n👶 Let's start tracking your little one's amazing progress!"
+        + Style.RESET_ALL
+    )
+    print(
+        Fore.YELLOW
+        + "\n________________________________________________________________"
+        + Style.RESET_ALL
+    )
 
     while True:
         print("\nAre you a new user or returning user?")
@@ -387,27 +425,47 @@ def main():
 
         if choice == '1':
             if add_new_user():
-                print("\nRegistration successful! Moving to daily logs.")
+                print(
+                    Fore.GREEN
+                    + "Registration successful! Moving to daily logs."
+                    + Style.RESET_ALL
+                    )
                 log_daily_baby_data()
                 print("Thank you for logging your baby's data. Goodbye!")
                 return
             else:
-                print("Registration failed. Try again.")
+                print(
+                    Fore.RED
+                    + "Registration failed. Try again."
+                    + Style.RESET_ALL
+                    )
         elif choice == '2':
             logged_in_user = login()
             if logged_in_user:
                 show_user_profile(logged_in_user)
                 update_summary()
                 display_user_summary(logged_in_user)
-                print("Login successful! Accessing main menu...")
+                print(
+                    Fore.GREEN
+                    + "Login successful! Accessing main menu..."
+                    + Style.RESET_ALL
+                    )
                 break
             else:
-                print("Login failed. Please try again.")
+                print(
+                    Fore.RED
+                    + "Login failed. Please try again."
+                    + Style.RESET_ALL
+                    )
         elif choice == '3':
             print("Goodbye!")
             return
         else:
-            print("Invalid input. Please enter 1, 2, or 3.")
+            print(
+                Fore.RED
+                + "Invalid input. Please enter 1, 2, or 3."
+                + Style.RESET_ALL
+                )
 
     while True:
         print("\nChoose an option:")
@@ -431,7 +489,11 @@ def main():
             print("Goodbye!")
             break
         else:
-            print("Invalid option. Please enter a number between 1 and 5.")
+            print(
+                Fore.RED
+                + "Invalid option. Please enter a number between 1 and 5."
+                + Style.RESET_ALL
+                )
 
 
 if __name__ == "__main__":
