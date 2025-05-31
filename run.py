@@ -410,26 +410,52 @@ def log_milestones():
     print("\n--- Log Baby Milestone ---")
 
     username = user_input("Enter your username", allow_back=False)
-    if username == 'b':
-        return
     if not is_username_taken(username):
-        print(Fore.RED + "Username not found." + Style.RESET_ALL)
+        print(
+            Fore.RED
+            + "Username not found. Please try again."
+            + Style.RESET_ALL
+        )
         return
 
-    date = user_input("Date (YYYY-MM-DD)")
-    if date == 'b':
-        return
-    try:
-        datetime.strptime(date, "%Y-%m-%d")
-    except ValueError:
-        print(Fore.RED + "Invalid date format." + Style.RESET_ALL)
-        return
+    steps = [
+        {"key": "date", "prompt": "Date (YYYY-MM-DD)"},
+        {"key": "milestone", "prompt": "Describe the milestone"}
+    ]
 
-    milestone = user_input("Describe the milestone")
-    if milestone == 'b':
-        return
+    data = {}
+    current_step = 0
 
-    new_row = [username, date, milestone]
+    while current_step < len(steps):
+        step = steps[current_step]
+        key = step["key"]
+        prompt = step["prompt"]
+
+        response = user_input(prompt, allow_back=True)
+
+        if response == 'b':
+            if current_step == 0:
+                print(
+                    Fore.RED
+                    + "Cannot go back further than this step."
+                    + Style.RESET_ALL
+                )
+                continue
+            else:
+                current_step -= 1
+                continue
+
+        if key == "date":
+            try:
+                datetime.strptime(response, "%Y-%m-%d")
+            except ValueError:
+                print(Fore.RED + "Invalid date format." + Style.RESET_ALL)
+                continue
+
+        data[key] = response
+        current_step += 1
+
+    new_row = [username, data["date"], data["milestone"]]
     milestones.append_row(new_row)
     print(Fore.GREEN + "🎉 Milestone logged successfully!" + Style.RESET_ALL)
 
