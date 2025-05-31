@@ -409,7 +409,7 @@ def display_user_summary(username):
 def log_milestones():
     print("\n--- Log Baby Milestone ---")
 
-    username = user_input("Enter your username")
+    username = user_input("Enter your username", allow_back=False)
     if username == 'b':
         return
     if not is_username_taken(username):
