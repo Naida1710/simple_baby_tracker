@@ -63,7 +63,8 @@ def verify_password(username, password):
 
 
 def add_new_user():
-    print("\n👋 Welcome, new user! Let's get you set up.")
+    print("\n👋 Welcome, new user!")
+    print("Let's get you set up.")
     print("We’ll ask a few quick questions to register you and your baby.")
     print(
         "Make sure you have your baby's date of birth "
@@ -77,7 +78,7 @@ def add_new_user():
         "Once registered, "
         "you can simply log in to access and view your data."
     )
-    print("Let's begin!\n")
+    print("\n🍼 Let's begin!")
 
     while True:
         username = user_input("Username", allow_back=False, allow_quit=True)
