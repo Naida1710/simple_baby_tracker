@@ -99,46 +99,85 @@ def add_new_user():
         + Style.RESET_ALL
     )
 
-    while True:
-        username = user_input("Username", allow_back=False, allow_quit=True)
-        if username.lower() == 'b':
-            print("Cannot go back from username input here.")
-            return False
-        if is_username_taken(username):
-            print("Username already taken. Please try another.")
-        else:
-            break
+    steps = [
+        {"key": "username", "prompt": "Username", "allow_back": False},
+        {"key": "password", "prompt": "Password"},
+        {"key": "baby_name", "prompt": "Baby Name"},
+        {"key": "baby_dob", "prompt": "Baby DOB (YYYY-MM-DD)"},
+        {"key": "birth_weight", "prompt": "Birth Weight (kg)"},
+        {"key": "birth_height", "prompt": "Birth Height (cm)"}
+    ]
 
-    while True:
-        password = user_input("Password", allow_back=False, allow_quit=True)
-        if password == 'b':
-            return add_new_user()
-        baby_name = user_input("Baby Name")
-        if baby_name == 'b':
-            continue
-        baby_dob = user_input("Baby DOB (YYYY-MM-DD)")
-        if baby_dob == 'b':
-            continue
-        try:
-            baby_age_months = calculate_age_months(baby_dob)
-        except ValueError:
-            print("Invalid date format. Please use YYYY-MM-DD.")
-            continue
-        birth_weight = user_input("Birth Weight (kg)")
-        if birth_weight == 'b':
-            continue
-        birth_height = user_input("Birth Height (cm)")
-        if birth_height == 'b':
-            continue
-        break
+    data = {}
+    current_step = 0
 
-    new_row = [username, password, baby_name, baby_dob,
-               str(baby_age_months), birth_weight, birth_height]
+    while current_step < len(steps):
+        step = steps[current_step]
+        key = step["key"]
+        prompt = step["prompt"]
+        allow_back = step.get("allow_back", True)
+
+        response = user_input(prompt, allow_back=allow_back)
+
+        if response == 'b':
+            if current_step > 0:
+                current_step -= 1
+            else:
+                print(Fore.RED + "Cannot go back further." + Style.RESET_ALL)
+            continue
+
+        if key == "username":
+            if is_username_taken(response):
+                print(
+                    Fore.RED
+                    + "Username already taken. Please try another."
+                    + Style.RESET_ALL
+                )
+                continue
+        elif key == "baby_dob":
+            try:
+                datetime.strptime(response, "%Y-%m-%d")
+            except ValueError:
+                print(
+                    Fore.RED
+                    + "Invalid date format. Please use YYYY-MM-DD."
+                    + Style.RESET_ALL
+                )
+                continue
+        elif key == "birth_weight" or key == "birth_height":
+            try:
+                float(response)
+            except ValueError:
+                print(
+                    Fore.RED
+                    + "Please enter a valid number."
+                    + Style.RESET_ALL
+                )
+                continue
+
+        data[key] = response
+        current_step += 1
+
+    baby_age_months = calculate_age_months(data["baby_dob"])
+    new_row = [
+        data["username"],
+        data["password"],
+        data["baby_name"],
+        data["baby_dob"],
+        str(baby_age_months),
+        data["birth_weight"],
+        data["birth_height"]
+    ]
     user_info.append_row(new_row)
 
-    print(f"\nHello, {username}! 🎉")
-    print("After you have entered the details about your baby, "
-          "let's record the baby's steps.\n")
+    print(Fore.GREEN + "\n✅ Registration successful!" + Style.RESET_ALL)
+    print(f"\nHello, {data['username']}! 🎉")
+    print(
+        Fore.CYAN
+        + "Once you've entered the details about your baby, "
+          "let's move to daily logs. "
+          + Style.RESET_ALL
+    )
 
     return True
 
@@ -443,7 +482,7 @@ def main():
             if add_new_user():
                 print(
                     Fore.GREEN
-                    + "Registration successful! Moving to daily logs."
+                    + "Registration successful!"
                     + Style.RESET_ALL
                     )
                 log_daily_baby_data()
