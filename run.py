@@ -134,7 +134,8 @@ def add_new_user():
 
 
 def login():
-    print("Please log in:")
+    print(Fore.CYAN + "Please log in:" + Style.RESET_ALL
+          )
     while True:
         username = user_input("Username", allow_back=False, allow_quit=True)
         if username == 'b':
@@ -153,7 +154,11 @@ def login():
         if password == 'b':
             return login()
         if verify_password(username, password):
-            print(f"\nHello,{username}, welcome back!")
+            print(
+                Fore.CYAN
+                + f"\nHello,{username}, welcome back!"
+                + Style.RESET_ALL
+            )
             return username
         else:
             print(
@@ -194,7 +199,7 @@ def log_daily_baby_data():
             wet_diapers = int(user_input("Wet Diapers"))
             dirty_diapers = int(user_input("Dirty Diapers"))
         except ValueError:
-            print("Please enter numeric values.")
+            print(Fore.RED + "Please enter numeric values." + Style.RESET_ALL)
             continue
         break
 
@@ -218,7 +223,7 @@ def log_growth_data():
     if username == 'b':
         return
     if not is_username_taken(username):
-        print("Username not found.")
+        print(Fore.RED + "Username not found." + Style.RESET_ALL)
         return
 
     date = user_input("Date (YYYY-MM-DD)")
@@ -227,14 +232,14 @@ def log_growth_data():
     try:
         datetime.strptime(date, "%Y-%m-%d")
     except ValueError:
-        print("Invalid date format.")
+        print(Fore.RED + "Invalid date format." + Style.RESET_ALL)
         return
 
     try:
         weight = float(user_input("Weight (kg)"))
         height = float(user_input("Height (cm)"))
     except ValueError:
-        print("Please enter numeric values.")
+        print(Fore.RED + "Please enter numeric values." + Style.RESET_ALL)
         return
 
     new_row = [username, date, weight, height]
@@ -254,7 +259,7 @@ def show_user_profile(username):
             print(f"Birth Weight: {row[5]} kg")
             print(f"Birth Height: {row[6]} cm")
             return
-    print("Profile not found.")
+    print(Fore.RED + "Profile not found." + Style.RESET_ALL)
 
 
 def display_user_summary(username):
@@ -266,7 +271,7 @@ def display_user_summary(username):
             for i, value in enumerate(row):
                 print(f"{headers[i]}: {value}")
             return
-    print("No summary data found.")
+    print(Fore.RED + "No summary data found." + Style.RESET_ALL)
 
 
 def log_milestones():
@@ -276,7 +281,7 @@ def log_milestones():
     if username == 'b':
         return
     if not is_username_taken(username):
-        print("Username not found.")
+        print(Fore.RED + "Username not found." + Style.RESET_ALL)
         return
 
     date = user_input("Date (YYYY-MM-DD)")
@@ -431,7 +436,11 @@ def main():
                     + Style.RESET_ALL
                     )
                 log_daily_baby_data()
-                print("Thank you for logging your baby's data. Goodbye!")
+                print(
+                    Fore.BLUE
+                    + "Thank you for logging your baby's data. Goodbye!"
+                    + Style.RESET_ALL
+                )
                 return
             else:
                 print(
