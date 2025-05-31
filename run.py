@@ -527,9 +527,10 @@ def main():
         if choice == '1':
             if add_new_user():
                 log_daily_baby_data()
+                log_growth_data()
                 print(
                     Fore.BLUE
-                    + "Thank you for logging your baby's data. Goodbye!"
+                    + "Thank you for logging your baby's data and growth info. Goodbye!"
                     + Style.RESET_ALL
                 )
                 return
