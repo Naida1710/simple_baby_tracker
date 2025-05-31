@@ -220,45 +220,91 @@ def login():
 def log_daily_baby_data():
     print("\n--- Log Daily Baby Data ---")
 
-    while True:
-        username = user_input("Enter your username")
-        if username == 'b':
-            return
-        if not is_username_taken(username):
-            print(
-                Fore.RED
-                + "Username not found. Please register first."
-                + Style.RESET_ALL
-            )
-        else:
-            break
+    steps = [
+        {
+            "key": "username",
+            "prompt": "Enter your username",
+            "allow_back": False,
+        },
+        {"key": "date", "prompt": "Date (YYYY-MM-DD)", "allow_back": True},
+        {"key": "sleep_hours", "prompt": "Sleep (hours)", "allow_back": True},
+        {"key": "feed_ml", "prompt": "Feed (ml)", "allow_back": True},
+        {"key": "wet_diapers", "prompt": "Wet Diapers", "allow_back": True},
+        {
+            "key": "dirty_diapers",
+            "prompt": "Dirty Diapers",
+            "allow_back": True
+        },
+    ]
 
-    while True:
-        date = user_input("Date (YYYY-MM-DD)")
-        if date == 'b':
-            continue
-        try:
-            datetime.strptime(date, "%Y-%m-%d")
-        except ValueError:
-            print(Fore.RED + "Invalid date format." + Style.RESET_ALL)
-            continue
-        try:
-            sleep_hours = float(user_input("Sleep (hours)"))
-            feed_ml = float(user_input("Feed (ml)"))
-            wet_diapers = int(user_input("Wet Diapers"))
-            dirty_diapers = int(user_input("Dirty Diapers"))
-        except ValueError:
-            print(Fore.RED + "Please enter numeric values." + Style.RESET_ALL)
-            continue
-        break
+    data = {}
+    current_step = 0
+
+    while current_step < len(steps):
+        step = steps[current_step]
+        key = step["key"]
+        prompt = step["prompt"]
+        allow_back = step["allow_back"]
+
+        response = user_input(prompt, allow_back=allow_back)
+
+        if response == 'b':
+            if current_step == 0:
+                print(
+                    Fore.RED
+                    + "Cannot go back from username input."
+                    + Style.RESET_ALL
+                )
+                continue
+            else:
+                current_step -= 1
+                continue
+
+        if key == "username":
+            if not is_username_taken(response):
+                print(
+                    Fore.RED
+                    + "Username not found. Please register first."
+                    + Style.RESET_ALL
+                )
+                continue
+        elif key == "date":
+            try:
+                datetime.strptime(response, "%Y-%m-%d")
+            except ValueError:
+                print(Fore.RED + "Invalid date format." + Style.RESET_ALL)
+                continue
+        elif key in ["sleep_hours", "feed_ml"]:
+            try:
+                float(response)
+            except ValueError:
+                print(
+                    Fore.RED
+                    + "Please enter a valid number."
+                    + Style.RESET_ALL
+                )
+                continue
+        elif key in ["wet_diapers", "dirty_diapers"]:
+            try:
+                int(response)
+            except ValueError:
+                print(
+                    Fore.RED
+                    + "Please enter an integer value."
+                    + Style.RESET_ALL
+                )
+                continue
+
+        data[key] = response
+        current_step += 1
 
     new_row = [
-        username,
-        date,
-        sleep_hours,
-        feed_ml,
-        wet_diapers,
-        dirty_diapers
+        data["username"],
+        data["date"],
+        float(data["sleep_hours"]),
+        float(data["feed_ml"]),
+        int(data["wet_diapers"]),
+        int(data["dirty_diapers"])
     ]
 
     daily_logs.append_row(new_row)
