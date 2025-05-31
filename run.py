@@ -2,6 +2,8 @@ import gspread
 from google.oauth2.service_account import Credentials
 from datetime import datetime, timedelta
 import sys
+from colorama import init, Fore, Style
+init(autoreset=True)
 
 SCOPE = [
     "https://www.googleapis.com/auth/spreadsheets",
@@ -345,7 +347,7 @@ def update_summary():
 
         summary_sheet.append_row(summary_row)
 
-    print("✅ Summary updated successfully!")
+    print(Fore.GREEN + "✅ Summary updated successfully!" + Style.RESET_ALL)
 
 
 def main():
