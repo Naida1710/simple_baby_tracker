@@ -192,7 +192,7 @@ def login():
         if not is_username_taken(username):
             print(
                 Fore.RED
-                + "Username not found. Please register first."
+                + "Username not found. Please try again."
                 + Style.RESET_ALL
             )
         else:
@@ -533,6 +533,9 @@ def update_summary():
 
 
 def main():
+    BOLD = "\033[1m"
+    RESET = "\033[0m"
+
     print(
         Fore.CYAN +
         "\n___________________________________________________________________"
@@ -540,9 +543,10 @@ def main():
     )
     print(
         Fore.YELLOW
-        + "\n                WELCOME TO SIMPLE BABY TRACKER!"
+        + f"\n{BOLD}                WELCOME TO SIMPLE BABY TRACKER!{RESET}"
         + Style.RESET_ALL
     )
+
     print(
         Fore.YELLOW
         + "\n⭐ This app helps parents track their baby's data "
