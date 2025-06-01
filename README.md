@@ -54,90 +54,136 @@ The primary goal of the site owner is to empower new parents by offering a relia
 
 ### User Registration
 
-1. User Registration
+1. Google Sheets Integration
 
-Register new users with unique usernames.
+**Secure Access**: Uses gspread with Google Service Account credentials to connect securely to your Google Sheets backend.
+**Multi-Sheet Support**: Stores different data categories in separate sheets:
+- user_info — Stores registered users and their babies’ info.
+- daily_logs — Tracks daily sleep, feeding, and diaper counts.
+- growth — Logs baby’s growth metrics (weight, height).
+- milestones — Records baby developmental milestones.
+- summary — Aggregates weekly summaries for each user.
 
-Collect user details including:
-- Username and password
-- Baby’s name
-- Baby’s date of birth (DOB)
-- Baby’s birth weight and height
+This structure keeps user's data organized and easily extendable.
 
-Validate input formats (e.g., date format YYYY-MM-DD, numeric input for weight/height).
-Prevent duplicate usernames.
-Calculate baby’s current age in months based on DOB.
+2. User Registration
 
+**Unique Usernames**: Checks if the chosen username already exists to avoid duplicates.
+**Baby Information**: Collects baby name, date of birth (validated to ensure proper date format), birth weight, and height.
+**Age Calculation**: Automatically computes baby age in months from date of birth.
+**Data Storage**: Saves all this info in the user_info worksheet.
+**Input Validation**: Ensures all fields are entered correctly before saving, prompting users to correct mistakes.
 
-2. User Login
+This ensures accurate baseline data for each baby.
 
-Login with username and password.
-Validate credentials against stored user data.
-Friendly error messages for invalid username or password.
-Option to quit or go back during login.
+3. User Login System
 
+**Username & Password Authentication**: Users log in with their username and password.
+**Error Handling**: Gives clear feedback if username does not exist or password is incorrect.
+**User-friendly Navigation**: Users can type q to quit or b to go back during input.
+**Session Management**: Once logged in, user session data is loaded for personalized interactions.
 
-3. Daily Baby Data Logging
+This keeps data secure and users clearly informed.
 
-Log daily details for a specific date:
-Sleep hours (float)
-Feed amount in milliliters (float)
-Number of wet diapers (integer)
-Number of dirty diapers (integer)
-Validate input formats and allow going back to correct entries.
-Save daily logs to the Google Sheets daily_logs worksheet.
+4. Daily Baby Data Logging
 
-4. Growth Data Logging
+**Data Fields**: Users input daily:
+- Date (validated)
+- Sleep duration (hours, numeric)
+- Feeding amount (ml, numeric)
+- Wet diapers count (numeric)
+- Dirty diapers count (numeric)
 
-Record baby’s growth measurements on a given date:
-Weight in kilograms (float)
-Height in centimeters (float)
-Validate input formats and allow navigation back during input.
-Save growth data to the growth worksheet.
+**Input Checking**: Validates every input for correct format and numeric values.
+**Data Storage**: Appends data to the daily_logs worksheet.
+**Flexible Input**: Users can quit or backtrack during entry.
 
-5. Milestone Logging
+Allows daily tracking of baby’s routine for better monitoring.
 
-Log developmental milestones with:
-Date of milestone
-Description of milestone
-Validate date format and allow going back in inputs.
-Save milestone entries to the milestones worksheet.
+5. Growth Data Logging
 
-6. User Profile Display
+Data Captured:
+- Date of measurement
+- - Baby’s weight (kg)
+Baby’s height (cm)
 
-View registered user profile including:
-Username
-Baby’s name
-DOB and age in months
-Birth weight and height
+**Validation**: Ensures date is formatted correctly and measurements are positive numbers.
+**Storage**: Adds records to the growth worksheet.
 
-7. Summary Display
+Provides longitudinal tracking of baby’s physical growth milestones.
 
-Show a user-specific summary from the summary worksheet.
-Displays various tracked metrics and notes.
+6. Milestone Logging
 
-8. Summary Sheet Update
+**Milestone Tracking**: Allows users to log developmental milestones with:
+- Date achieved
+- Description of milestone (e.g., “First smile”, “Crawling”)
 
-Generate weekly summaries for all users including:
-Total sleep hours logged in the past 7 days.
-Average feed amount (ml) over the past week.
-Number of milestones achieved.
-Latest recorded weight and height.
-Clear and recreate the summary sheet each time it is updated.
+**Validation**: Checks for valid date entries.
+**Storage**: Saves milestones to the milestones worksheet.
 
-9. User Input Handling
+Helps parents keep track of important baby achievements.
 
-Input prompts with support for:
-Quitting anytime by typing 'q'.
-Going back to previous input by typing 'b'.
-Input validation with user-friendly error messages.
-Use of colored terminal output for better user experience (via colorama).
+7. User Profile Display
 
-10. Security and Usability
+**Overview**: Shows a summary of the logged-in user’s and baby’s details:
+- Username
+- Baby name
+- Date of birth
+- Baby’s current age (in months)
+- Birth weight and height
 
-Password verification during login.
-Input sanitization and validation.
-Friendly navigation allowing users to correct mistakes.
+Gives quick access to personal and baby info.
+
+8. User Summary Display
+
+**Summary Overview**: Pulls data from the summary worksheet to show:
+- Total sleep over the past week
+- Average daily feeding amount
+- Number of milestones achieved recently
+- Latest weight and height recorded
+- Any additional notes
+
+**Helps Parents**: Provides at-a-glance insight into the baby’s recent progress.
+
+9. Summary Sheet Update
+
+Automated Aggregation:
+- Calculates total sleep in last 7 days
+- Computes average feeding volume
+- Counts milestones recorded recently
+- Retrieves most recent growth measurements
+
+**Data Refresh**: Clears previous summary data and rewrites updated figures.
+**Keeps Summary Current**: Ensures parents always see up-to-date info.
+
+This feature consolidates scattered data for meaningful insights.
+
+10. Enhanced Input Handling
+
+User-friendly Commands:
+- q to quit from prompts at any time.
+- b to go back to previous menu or input prompt.
+
+**Clear Instructions**: Prompts display available options explicitly.
+
+**Visual Feedback**: Uses colored console text with colorama:
+- Green for success messages
+- Red for errors or invalid inputs
+- Yellow for warnings or info
+- Blue for goodbye message
+- Cyan for instructions
+
+**Robust Validation**: Catches invalid inputs early and guides user to correct mistakes.
+
+These improve usability and reduce frustration during data entry.
+
+## Future Features
+
+- Allow users to create profiles for multiple babies under the same account.
+- Auto-save progress every few inputs to prevent data loss if the program closes unexpectedly.
+- Record the exact time for each data entry, not just the date.
+- Add password reset option.
+- Allow users to export their baby’s logged data as CSV or simple text reports.
 
 
 
