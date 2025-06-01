@@ -102,9 +102,15 @@ def add_new_user():
     print(
         Fore.YELLOW
         + "Once registered, "
-        "you can simply log in to access your data."
+        "simply log in to view your profile and summary."
         + Style.RESET_ALL
         )
+    print(
+        Fore.YELLOW
+        + "Continue by adding "
+        "new data or check your existing info anytime."
+        + Style.RESET_ALL
+    )
     print(Fore.YELLOW + "\n🎬 Let's begin!" + Style.RESET_ALL)
     print(
         Fore.CYAN
@@ -505,7 +511,7 @@ def log_milestones():
 
 
 def update_summary():
-    print("\n--- Updating summary sheet ---")
+    print("\n--- LOADING SUMMARY SHEET... ---")
     summary_sheet.clear()
 
     headers = ["Username", "Total Sleep This Week", "Average Feed (ml)",
