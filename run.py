@@ -198,6 +198,11 @@ def add_new_user():
 def login():
     BOLD = "\033[1m"
     RESET = "\033[0m"
+    print(
+        Fore.CYAN
+        + "\n________________________________________________________________"
+        + Style.RESET_ALL
+    )
     print(Fore.CYAN + "Please log in:" + Style.RESET_ALL
           )
     while True:
@@ -218,6 +223,14 @@ def login():
         if password == 'b':
             return login()
         if verify_password(username, password):
+            print(
+                Fore.CYAN
+                + "\n"
+                + "________________________________________________"
+                + "________________"
+                + Style.RESET_ALL
+            )
+
             print(
                 Fore.CYAN
                 + BOLD
@@ -397,7 +410,7 @@ def log_growth_data():
 
 
 def show_user_profile(username):
-    print("\n--- Your Profile ---")
+    print(Fore.MAGENTA + "--- Your Profile ---" + Style.RESET_ALL)
     records = user_info.get_all_values()[1:]
     for row in records:
         if row[0] == username:
@@ -412,7 +425,11 @@ def show_user_profile(username):
 
 
 def display_user_summary(username):
-    print("\n--- Your Summary ---")
+    print(
+        Fore.MAGENTA
+        + "--- Your Summary ---"
+        + Style.RESET_ALL
+    )
     summary_rows = summary_sheet.get_all_values()
     headers = summary_rows[0]
     for row in summary_rows[1:]:
@@ -555,7 +572,7 @@ def main():
 
     print(
         Fore.CYAN +
-        "\n___________________________________________________________________"
+        "\n________________________________________________________________"
         + Style.RESET_ALL
     )
     print(
