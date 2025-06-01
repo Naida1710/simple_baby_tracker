@@ -24,6 +24,8 @@ summary_sheet = SHEET.worksheet('summary')
 
 
 def user_input(prompt, allow_back=True, allow_quit=True):
+    BOLD = "\033[1m"
+    RESET = "\033[0m"
     suffix = ""
     if allow_quit:
         suffix += " (or type 'q' to quit"
@@ -38,7 +40,11 @@ def user_input(prompt, allow_back=True, allow_quit=True):
             suffix += ": "
     response = input(prompt.rstrip(": ") + suffix).strip()
     if allow_quit and response.lower() in ['q', 'quit', 'exit']:
-        print(Fore.BLUE + "Exiting the program. Goodbye!" + Style.RESET_ALL)
+        print(
+            Fore.BLUE
+            + BOLD + "Exiting the program. Goodbye!"
+            + RESET + Style.RESET_ALL
+        )
         sys.exit()
     if allow_back and response.lower() == 'b':
         return 'b'
@@ -65,12 +71,19 @@ def verify_password(username, password):
 
 
 def add_new_user():
+    BOLD = "\033[1m"
+    RESET = "\033[0m"
+
     print(
         Fore.CYAN
         + "\n________________________________________________________________"
         + Style.RESET_ALL
     )
-    print(Fore.YELLOW + "\n👋 Welcome, new user!" + Style.RESET_ALL)
+    print(
+        Fore.YELLOW
+        + BOLD + "\n👋 Welcome, new user!"
+        + RESET + Style.RESET_ALL
+    )
     print(Fore.YELLOW + "\n🍼 Let's get you set up." + Style.RESET_ALL)
     print(
         Fore.YELLOW
@@ -183,6 +196,8 @@ def add_new_user():
 
 
 def login():
+    BOLD = "\033[1m"
+    RESET = "\033[0m"
     print(Fore.CYAN + "Please log in:" + Style.RESET_ALL
           )
     while True:
@@ -205,7 +220,9 @@ def login():
         if verify_password(username, password):
             print(
                 Fore.CYAN
-                + f"\nHello,{username}, welcome back!"
+                + BOLD
+                + f"\nHello, {username}, welcome back!"
+                + RESET
                 + Style.RESET_ALL
             )
             return username
@@ -661,7 +678,7 @@ def main():
         elif choice == '3':
             log_milestones()
         elif choice == '4':
-            print(Fore.BLUE + "GOODBYE!" + Style.RESET_ALL)
+            print(Fore.BLUE + BOLD + "GOODBYE!" + RESET + Style.RESET_ALL)
             break
         else:
             print(
