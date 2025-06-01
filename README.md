@@ -27,6 +27,10 @@ The primary goal of the site owner is to empower new parents by offering a relia
 
 - **Reduced Mental Load**: I want to support parents during a busy and emotional phase of life by simplifying the tracking process.
 
+- **Returning Users Login System**: I want enable returning users to access their past logs through a simple username and password login system.
+
+- **Application Structure**: I want straightforward, well-structured questions that are easy for users to understand and answer.
+
 ### Site User Goals
 
 #### First-time users
@@ -39,22 +43,12 @@ The primary goal of the site owner is to empower new parents by offering a relia
 
 - **Trust the Data Safety**: I want to gain confidence that data is securely stored in Google Sheets and easily accessible.
 
+#### Returning users
 
-### Returning Visitor Goals
+- I want to feel supported by having one simple, organized place to manage my baby’s routine.
+- I want to view summaries of sleep, feeding, and diaper data to spot patterns and track consistency.
+- I want to update milestones as my baby reaches new developments.
+- I want to log daily baby activities quickly using my username and password to protect my information.
 
-As a returning user, I want to:
 
-* Log in securely with my username.
-* Enter my password to protect my information.
-* Review my previously entered details and progress.
-
-### Site Owner Goals
-As the creator of Rehab Metrics, my goal is to develop an intuitive and accessible post operation tracking tool for individuals recovering from knee surgery. I aim to:
-
-* Create a user-friendly interface that avoids medical jargon.
-* Ask clear, structured questions that users can easily understand and respond to.
-* Convert the user's input into meaningful feedback to give guidance on their stage of recovery.
-* Store data securely using Google Sheets.
-* Allow returning users to retrieve their previous entries by logging in with a username and password.
-* The focus is to provide reassurance and progress tracking during a crucial recovery period.
 
