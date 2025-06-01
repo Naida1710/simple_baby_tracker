@@ -185,8 +185,9 @@ These improve usability and reduce frustration during data entry.
 - Add password reset option.
 - Allow users to export their baby’s logged data as CSV or simple text reports.
 
+## Bugs
 
-## Fixed Bugs 
+### Fixed Bugs 
 
 * BUG:'Back'Option - When I typed 'b' to go back during data input (e.g., while entering sleep hours), the app exited the whole function instead of returning to the previous step. The 'b' input wasn’t being intercepted properly and was treated like any invalid input or passed through without a return handler.
 **FIX**: I added input checking for 'b' in each step. When detected, the function now returns a 'back' signal, and the main loop handles re-displaying the previous prompt.
@@ -200,7 +201,77 @@ These improve usability and reduce frustration during data entry.
 * BUG: "None" Milestone - When I entered None in the milestone input, the app still counted it as a valid milestone entry in the summary, inflating the count.The milestone logging function did not properly validate user input. The input 'None' was being appended to the milestone log and later included in summary statistics.
 **FIX**: I added input validation to check for 'None' before saving a milestone.
 
-## Unfixed Bugs
+### Unfixed Bugs
 
 There are no fixed bugs according to me.
+
+## Testing
+
+### Manual Testing
+
+See [TESTING.md](TESTING.md) for more details of manual testing.
+Manual tests were carried out throughout the development process. Each feature was tested to ensure correct functionality, including error handling, user input validation, and support for multiple user accounts. This included:
+- Username and Name Validation: Inputs were tested to confirm that whitespace and special characters were not allowed. The username was validated to accept only 2–10 characters.
+- Password Validation: Password inputs were tested to ensure they were at least 6 characters long and contained no whitespace.
+- New and Returning Users: Multiple scenarios were tested, including new user registration, returning user login, invalid entries, and quitting mid-process.
+
+### Validation Testing
+
+I used the [CI Python Linter](https://pep8ci.herokuapp.com/#) and followed the [PEP8 guidelines](https://peps.python.org/pep-0008/) to validate my code.
+
+As a result of the linting process, I made the following adjustments:
+
+1. Removed unnecessary blank lines and trailing white spaces.
+2. Ensured that all lines are under 79 characters, and limited docstring lines to 72 characters as recommended.
+3. Grouped imports in the correct order:
+- Standard library imports
+- Related third-party imports
+- Local application imports
+
+![Run Pythin Linter](assets/run-python-linter.png)
+
+![Guide Python Linter](assets/guide-python-linter.png)
+
+## Deployment
+
+This project was deployed using the Code Institute’s mock terminal for Heroku.
+
+Steps for deployment:
+1. Add the list of requirements by writing in the terminal "pip3 freeze > requirements.txt".
+2. Log into Heroku.
+4. Click "NEW" in the top right-hand corner and choose the option Create new app.
+5. Input a unique app name.
+6. Choose Region - Europe.
+7. Choose "Settings" from the menu.
+8. Go to section "Config Vars" and click button "Reveal Config Vars”.
+9. Add key and value. For this project I added creds.json as the key and copied the contents of this into the value.
+10. Go to section "Build packs" and click "Add build pack”.
+11. Go to "Deploy" in the menu bar.
+12. Go to section "deployment method", choose "GitHub".
+13. New section will appear "Connect to GitHub".
+14. Type the name of your repository and click "search".
+15. Once Heroku finds your repository - click "connect".
+16. Click "Enable automatic deploys" or manually deploy by choosing "Deploy branch".
+17. Click "Deploy branch".
+
+
+## Forking and Cloning
+To fork this repository:
+
+1. Log in to your Github account.
+2. Navigate to the repository page.
+3. Click the "Fork" button in the top-right corner.
+
+To Clone:
+
+1. Go to the forked repository on Github.
+2. Click the green "Code" button.
+3. Copy the HTTPS link: 
+4. Open your terminal and type: git clone 
+
+## Credits
+
+https://www.canva.com/dream-lab
+
+
 
