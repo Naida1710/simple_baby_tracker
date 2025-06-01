@@ -630,7 +630,7 @@ def main():
                     + Style.RESET_ALL
                     )
         elif choice == '3':
-            print(Fore.BLUE + "GOODBYE!" + Style.RESET_ALL)
+            print(Fore.BLUE + BOLD + "GOODBYE!" + RESET + Style.RESET_ALL)
             return
         else:
             print(
