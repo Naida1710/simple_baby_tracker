@@ -15,7 +15,7 @@ The objective of the application is to help new parents who want a simple, non-a
 
 The primary goal of the site owner is to empower new parents by offering a reliable, user-friendly tool to track their baby’s daily habits and developmental progress. This baby tracker app serves as a digital companion during the early, often overwhelming stages of parenthood. As a parent of a newborn, I found it challenging to keep track of my baby’s daily needs and milestones while adjusting to a new routine. To solve this problem, I created a tool that not only helps other new parents, but also supports me in monitoring and understanding my baby's growth.
 
-- **Easy Access to Data**: All logs are saved automatically and securely, giving parents access to their data anytime, anywhere.
+- **Easy Access to Data**: I want all logs to be saved automatically and securely, giving parents access to their data anytime, anywhere.
 
 - **Better Awareness**: I want to help parents recognize patterns in sleep, feeding, diaper changes, and growth.
 
@@ -27,13 +27,18 @@ The primary goal of the site owner is to empower new parents by offering a relia
 
 - **Reduced Mental Load**: I want to support parents during a busy and emotional phase of life by simplifying the tracking process.
 
-### First Time Visitor Goals
+### Site User Goals
 
-As a first-time user, I want to:
+#### First-time users
 
-* Easily navigate the application and understand its purpose.
-* Enter my personal details related to recovery.
-* Have a record of my details that provides feedback on my progress.
+- **Understand the App’s Purpose**: I want to quickly grasp that the app helps parents track their baby's daily needs and development.
+
+- **See the Benefits**: I want to learn how the app reduces stress by organizing data and offering helpful summaries and feedback.
+
+- **Know It’s Beginner-Friendly**: I want to feel reassured that no advanced technical skills are needed to use the app.
+
+- **Trust the Data Safety**: I want to gain confidence that data is securely stored in Google Sheets and easily accessible.
+
 
 ### Returning Visitor Goals
 
