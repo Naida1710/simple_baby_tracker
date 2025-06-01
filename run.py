@@ -203,6 +203,7 @@ def login():
         + "\n________________________________________________________________"
         + Style.RESET_ALL
     )
+    print()
     print(Fore.CYAN + "Please log in:" + Style.RESET_ALL
           )
     while True:
@@ -230,7 +231,12 @@ def login():
                 + "________________"
                 + Style.RESET_ALL
             )
-
+            print()
+            print(
+                Fore.GREEN + BOLD
+                + "Login successful!"
+                + RESET + Style.RESET_ALL
+            )
             print(
                 Fore.CYAN
                 + BOLD
@@ -238,6 +244,8 @@ def login():
                 + RESET
                 + Style.RESET_ALL
             )
+            print(Fore.CYAN + "Let’s take a look at your profile "
+                  "and current summary sheet." + Style.RESET_ALL)
             return username
         else:
             print(
@@ -410,6 +418,7 @@ def log_growth_data():
 
 
 def show_user_profile(username):
+    print()
     print(Fore.MAGENTA + "--- Your Profile ---" + Style.RESET_ALL)
     records = user_info.get_all_values()[1:]
     for row in records:
@@ -425,6 +434,7 @@ def show_user_profile(username):
 
 
 def display_user_summary(username):
+    print()
     print(
         Fore.MAGENTA
         + "--- Your Summary ---"
@@ -610,6 +620,7 @@ def main():
     )
 
     while True:
+        print()
         print(
             Fore.CYAN
             + "Are you a new user or returning user?"
@@ -652,8 +663,15 @@ def main():
                 update_summary()
                 display_user_summary(logged_in_user)
                 print(
+                    Fore.CYAN
+                    + "\n________________________________________"
+                    "________________________"
+                    + Style.RESET_ALL
+                )
+                print()
+                print(
                     Fore.GREEN
-                    + "Login successful! Accessing main menu..."
+                    + "You may now access the main menu."
                     + Style.RESET_ALL
                     )
                 break
@@ -680,7 +698,8 @@ def main():
         )
 
     while True:
-        print("\nChoose an option:")
+        print()
+        print(Fore.CYAN + "Choose an option:" + Style.RESET_ALL)
         print("1. Log Daily Baby Data")
         print("2. Log Growth Data")
         print("3. Log Milestones")
