@@ -186,4 +186,21 @@ These improve usability and reduce frustration during data entry.
 - Allow users to export their baby’s logged data as CSV or simple text reports.
 
 
+## Fixed Bugs 
+
+* BUG:'Back'Option - When I typed 'b' to go back during data input (e.g., while entering sleep hours), the app exited the whole function instead of returning to the previous step. The 'b' input wasn’t being intercepted properly and was treated like any invalid input or passed through without a return handler.
+**FIX**: I added input checking for 'b' in each step. When detected, the function now returns a 'back' signal, and the main loop handles re-displaying the previous prompt.
+
+* BUG: Daily Logs Date Association - Daily logs stored in the Google Sheet did not contain a clear date, making it difficult to analyze trends or retrieve entries for a specific day.The append_row() function did not include a timestamp by default.
+**FIX**: I introduced a timestamp using Python’s datetime module and prepended it to each row before storing.
+
+* BUG: Invalid Input (e.g., Typing 'ten') - Entering non-numeric values for numeric questions (e.g., "ten" instead of 10) I caused a ValueError and crashed the app. int() or float() conversion was not wrapped in error handling logic.
+**Fix**: I wrapped all numeric conversions in try/except blocks and looped until the user provided a valid value.
+
+* BUG: "None" Milestone - When I entered None in the milestone input, the app still counted it as a valid milestone entry in the summary, inflating the count.The milestone logging function did not properly validate user input. The input 'None' was being appended to the milestone log and later included in summary statistics.
+**FIX**: I added input validation to check for 'None' before saving a milestone.
+
+## Unfixed Bugs
+
+There are no fixed bugs according to me.
 
