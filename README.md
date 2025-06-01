@@ -50,5 +50,94 @@ The primary goal of the site owner is to empower new parents by offering a relia
 - I want to update milestones as my baby reaches new developments.
 - I want to log daily baby activities quickly using my username and password to protect my information.
 
+## Features
+
+### User Registration
+
+1. User Registration
+
+Register new users with unique usernames.
+
+Collect user details including:
+- Username and password
+- Baby’s name
+- Baby’s date of birth (DOB)
+- Baby’s birth weight and height
+
+Validate input formats (e.g., date format YYYY-MM-DD, numeric input for weight/height).
+Prevent duplicate usernames.
+Calculate baby’s current age in months based on DOB.
+
+
+2. User Login
+
+Login with username and password.
+Validate credentials against stored user data.
+Friendly error messages for invalid username or password.
+Option to quit or go back during login.
+
+
+3. Daily Baby Data Logging
+
+Log daily details for a specific date:
+Sleep hours (float)
+Feed amount in milliliters (float)
+Number of wet diapers (integer)
+Number of dirty diapers (integer)
+Validate input formats and allow going back to correct entries.
+Save daily logs to the Google Sheets daily_logs worksheet.
+
+4. Growth Data Logging
+
+Record baby’s growth measurements on a given date:
+Weight in kilograms (float)
+Height in centimeters (float)
+Validate input formats and allow navigation back during input.
+Save growth data to the growth worksheet.
+
+5. Milestone Logging
+
+Log developmental milestones with:
+Date of milestone
+Description of milestone
+Validate date format and allow going back in inputs.
+Save milestone entries to the milestones worksheet.
+
+6. User Profile Display
+
+View registered user profile including:
+Username
+Baby’s name
+DOB and age in months
+Birth weight and height
+
+7. Summary Display
+
+Show a user-specific summary from the summary worksheet.
+Displays various tracked metrics and notes.
+
+8. Summary Sheet Update
+
+Generate weekly summaries for all users including:
+Total sleep hours logged in the past 7 days.
+Average feed amount (ml) over the past week.
+Number of milestones achieved.
+Latest recorded weight and height.
+Clear and recreate the summary sheet each time it is updated.
+
+9. User Input Handling
+
+Input prompts with support for:
+Quitting anytime by typing 'q'.
+Going back to previous input by typing 'b'.
+Input validation with user-friendly error messages.
+Use of colored terminal output for better user experience (via colorama).
+
+10. Security and Usability
+
+Password verification during login.
+Input sanitization and validation.
+Friendly navigation allowing users to correct mistakes.
+
 
 
