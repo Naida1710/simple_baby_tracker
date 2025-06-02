@@ -3,8 +3,7 @@
 ![Welcome to Simple Baby Tracker](assets/images/BabyTracker.png)
 
 Simple Baby Tracker is an interactive command-line baby tracking application implemented in Python and deployed via Code Institute's Heroku Terminal.
-
-The app is designed for new parents to easily log and monitor their baby's daily activities (Sleep, Feed, Diaper Changes), growth progress (weight and height) and development milestones, with a structured interface and personalized feedback, using Google Sheets backend.
+The app is designed for new parents to easily log and monitor their baby's daily activities—such as sleep, feeding, and diaper changes—as well as track growth progress (weight and height) and developmental milestones. It features secure user registration and login, with built-in validation for usernames and passwords. While every parent receives recommendations from doctors about average sleep and feeding amounts per day, this app is intended solely to help parents conveniently track their baby's data. All data is securely stored using Google Sheets integration.
 
 ## Objective
 The objective of the application is to help new parents who want a simple, non-app-based solution to track their baby's daily needs and development progress using just their computer and Google account.
@@ -203,7 +202,7 @@ These improve usability and reduce frustration during data entry.
 
 ### Unfixed Bugs
 
-There are no fixed bugs according to me.
+As of the latest testing, no bugs have been identified. The website is functioning as expected, to the best of my knowledge.
 
 ## Testing
 
@@ -228,7 +227,7 @@ As a result of the linting process, I made the following adjustments:
 - Related third-party imports
 - Local application imports
 
-![Run Pythin Linter](assets/run-python-linter.png)
+![Run Python Linter](assets/run-python-linter.png)
 
 ![Guide Python Linter](assets/guide-python-linter.png)
 
@@ -269,9 +268,34 @@ To Clone:
 3. Copy the HTTPS link: 
 4. Open your terminal and type: git clone 
 
+## Technology Used
+
+* Visual Studio Code with assistance of flake8 linter extension.
+* [Github](https://github.com/) to host the repository.
+* Git used for version control. (git add, git commit, git push)
+* The [CI Python Linter](https://pep8ci.herokuapp.com/#) for validating the Python code.
+* [Heroku](https://pep8ci.herokuapp.com/) for deploying the website.
+* Flow charts from [Lucid Chart](https://lucid.app).
+
+## Python Version, Packages and Libaries Used
+The project was developed using Python 3.13.2.
+
+The following Python packages and libaries were used:
+* datetime - Used to work with date and time, particulary to calculate recovery timelines based on number of days since surgery.
+* gspread - Used to interact with Google Sheets API for reading and writing data to a spreadsheet.
+* google.oauth2.service_account.Credentials - Provides secure authentication for access to Google Sheets API.
+* colorama - Used to add colour to the terminal output.
+* sys - used to see paths to files and exit code if necessary
+
 ## Credits
 
 https://www.canva.com/dream-lab
+
+## Acknowledgements
+
+- I'm really grateful to my mentor, Dick Vlaanderen, for sharing helpful advice and thoughtful suggestions throughout the project.
+
+- I’d like to thank my husband for his unwavering support, especially for patiently taking care of our nine- month-old baby while I was working on my projects.
 
 
 

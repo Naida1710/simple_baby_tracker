@@ -270,7 +270,12 @@ def log_daily_baby_data():
             "prompt": "Enter your username",
             "allow_back": False,
         },
-        {"key": "date", "prompt": "Date (YYYY-MM-DD)", "allow_back": True},
+        {
+            "key": "log_date",
+            "prompt": "Log Date (YYYY-MM-DD)",
+            "allow_back": True,
+        },
+
         {"key": "sleep_hours", "prompt": "Sleep (hours)", "allow_back": True},
         {"key": "feed_ml", "prompt": "Feed (ml)", "allow_back": True},
         {"key": "wet_diapers", "prompt": "Wet Diapers", "allow_back": True},
@@ -312,7 +317,7 @@ def log_daily_baby_data():
                     + Style.RESET_ALL
                 )
                 continue
-        elif key == "date":
+        elif key == "log_date":
             try:
                 datetime.strptime(response, "%Y-%m-%d")
             except ValueError:
@@ -340,11 +345,20 @@ def log_daily_baby_data():
                 continue
 
         data[key] = response
+
+        if log_exists(daily_logs, data["username"], data["log_date"]):
+            print(
+                Fore.RED
+                + f"Daily log for {data['log_date']} already exists."
+                + Style.RESET_ALL
+            )
+            return
+
         current_step += 1
 
     new_row = [
         data["username"],
-        data["date"],
+        data["log_date"],
         float(data["sleep_hours"]),
         float(data["feed_ml"]),
         int(data["wet_diapers"]),
@@ -368,7 +382,7 @@ def log_growth_data():
         return
 
     steps = [
-        {"key": "date", "prompt": "Date (YYYY-MM-DD)"},
+        {"key": "log_date", "prompt": "Log Date (YYYY-MM-DD)"},
         {"key": "weight", "prompt": "Weight (kg)"},
         {"key": "height", "prompt": "Height (cm)"},
     ]
@@ -397,7 +411,7 @@ def log_growth_data():
                 current_step -= 1
                 continue
 
-        if key == "date":
+        if key == "log_date":
             try:
                 datetime.strptime(response, "%Y-%m-%d")
             except ValueError:
@@ -417,7 +431,7 @@ def log_growth_data():
         data[key] = response
         current_step += 1
 
-    new_row = [username, data["date"],
+    new_row = [username, data["log_date"],
                float(data["weight"]), float(data["height"])]
     growth.append_row(new_row)
     print(Fore.GREEN + "✅ Growth data saved successfully!" + Style.RESET_ALL)
@@ -456,6 +470,15 @@ def display_user_summary(username):
     print(Fore.RED + "No summary data found." + Style.RESET_ALL)
 
 
+def log_exists(worksheet, username, log_date):
+    """Check if a log for the given username and date already exists."""
+    records = worksheet.get_all_values()[1:]  # skip header
+    for row in records:
+        if row[0] == username and row[1] == log_date:
+            return True
+    return False
+
+
 def log_milestones():
     print("\n--- Log Baby Milestone ---")
 
@@ -469,7 +492,7 @@ def log_milestones():
         return
 
     steps = [
-        {"key": "date", "prompt": "Date (YYYY-MM-DD)"},
+        {"key": "log_date", "prompt": "Log Date (YYYY-MM-DD)"},
         {"key": "milestone", "prompt": "Describe the milestone"}
     ]
 
@@ -495,7 +518,7 @@ def log_milestones():
                 current_step -= 1
                 continue
 
-        if key == "date":
+        if key == "log_date":
             try:
                 datetime.strptime(response, "%Y-%m-%d")
             except ValueError:
@@ -503,9 +526,18 @@ def log_milestones():
                 continue
 
         data[key] = response
+
+        if log_exists(milestones, username, data["log_date"]):
+            print(
+                Fore.RED
+                + f"You've already logged a milestone for {data['log_date']}."
+                + Style.RESET_ALL
+            )
+            return
+
         current_step += 1
 
-    new_row = [username, data["date"], data["milestone"]]
+    new_row = [username, data["log_date"], data["milestone"]]
     milestones.append_row(new_row)
     print(Fore.GREEN + "\n✅ Milestone saved successfully!" + Style.RESET_ALL)
 
@@ -599,8 +631,8 @@ def main():
 
     print(
         Fore.YELLOW
-        + "\n⭐ This app helps parents track their baby's data "
-        "up to age 2."
+        + "\n⭐ This app helps you track your baby's data "
+        "during their 1st year."
         + Style.RESET_ALL
     )
     print(
