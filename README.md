@@ -103,8 +103,8 @@ Allows daily tracking of baby’s routine for better monitoring.
 
 Data Captured:
 - Date of measurement
-- - Baby’s weight (kg)
-Baby’s height (cm)
+- Baby’s weight (kg)
+- Baby’s height (cm)
 
 **Validation**: Ensures date is formatted correctly and measurements are positive numbers.
 **Storage**: Adds records to the growth worksheet.
@@ -311,7 +311,8 @@ I've used the following Python packages and/or external imported packages:
 
 ## Credits
 
-https://www.canva.com/dream-lab
+https://www.canva.com/dream-lab 
+https://emojipedia.org/ 
 
 ## Acknowledgements
 

@@ -374,19 +374,23 @@ def log_daily_baby_data():
     ]
     daily_logs.append_row(new_row)
     print(Fore.GREEN + "✅ Daily log saved successfully!" + Style.RESET_ALL)
+    update_summary()
 
 
 def log_growth_data():
     print("\n--- Log Growth Data ---")
 
-    username = user_input("Enter your username", allow_back=False)
-    if not is_username_taken(username):
-        print(
-            Fore.RED
-            + "Username not found. Please try again."
-            + Style.RESET_ALL
-        )
-        return
+    while True:
+        username = user_input("Enter your username", allow_back=False)
+        if is_username_taken(username):
+            break
+        else:
+
+            print(
+                Fore.RED
+                + "Username not found. Please try again."
+                + Style.RESET_ALL
+            )
 
     steps = [
         {"key": "log_date", "prompt": "Log Date (YYYY-MM-DD)"},
@@ -451,6 +455,7 @@ def log_growth_data():
                float(data["weight"]), float(data["height"])]
     growth.append_row(new_row)
     print(Fore.GREEN + "✅ Growth data saved successfully!" + Style.RESET_ALL)
+    update_summary()
 
 
 def show_user_profile(username):
@@ -489,14 +494,17 @@ def display_user_summary(username):
 def log_milestones():
     print("\n--- Log Baby Milestone ---")
 
-    username = user_input("Enter your username", allow_back=False)
-    if not is_username_taken(username):
-        print(
-            Fore.RED
-            + "Username not found. Please try again."
-            + Style.RESET_ALL
-        )
-        return
+    # Loop until valid username entered
+    while True:
+        username = user_input("Enter your username", allow_back=False)
+        if not is_username_taken(username):
+            print(
+                Fore.RED
+                + "Username not found. Please try again."
+                + Style.RESET_ALL
+            )
+        else:
+            break
 
     steps = [
         {"key": "log_date", "prompt": "Log Date (YYYY-MM-DD)"},
@@ -546,15 +554,15 @@ def log_milestones():
     new_row = [username, data["log_date"], data["milestone"]]
     milestones.append_row(new_row)
     print(Fore.GREEN + "\n✅ Milestone saved successfully!" + Style.RESET_ALL)
+    update_summary()
 
 
 def update_summary():
     print("\n--- LOADING SUMMARY SHEET... ---")
     summary_sheet.clear()
 
-    headers = ["Username", "Total Sleep This Week", "Average Feed (ml)",
+    headers = ["Username", "Total Sleep This Week", "Total Feed (ml)",
                "Milestones Achieved", "Latest Weight", "Latest Height"]
-
     summary_sheet.append_row(headers)
 
     today = datetime.today()
@@ -565,56 +573,61 @@ def update_summary():
     milestone_rows = milestones.get_all_values()[1:]
     growth_rows = growth.get_all_values()[1:]
 
-    for user_row in user_rows:
-        username = user_row[0]
-        sleep_sum = 0
-        feed_values = []
-        for d_row in daily_rows:
-            if d_row[0] == username:
-                try:
-                    log_date = datetime.strptime(d_row[1], "%Y-%m-%d")
-                except ValueError:
-                    continue
-                if log_date >= week_ago:
-                    sleep_sum += float(d_row[2])
-                    feed_values.append(float(d_row[3]))
+    for user in user_rows:
+        username = user[0]
 
-        avg_feed = (
-            round(sum(feed_values) / len(feed_values), 2)
-            if feed_values else 0
-        )
-
-        user_milestones = set()
-        for m_row in milestone_rows:
-            if m_row[0] == username:
-                user_milestones.add(m_row[2])
-
-        latest_weight = None
-        latest_height = None
-        latest_date = None
-        for g_row in growth_rows:
-            if g_row[0] == username:
-                try:
-                    g_date = datetime.strptime(g_row[1], "%Y-%m-%d")
-                except ValueError:
-                    continue
-                if (latest_date is None) or (g_date > latest_date):
-                    latest_date = g_date
-                    latest_weight = g_row[2]
-                    latest_height = g_row[3]
-
-        summary_row = [
-            username,
-            sleep_sum,
-            avg_feed,
-            len(user_milestones),
-            latest_weight or "",
-            latest_height or ""
+        # Filter daily logs for this user and last 7 days
+        user_daily_logs = [row for row in daily_rows if row[0] == username]
+        recent_logs = [
+            row for row in user_daily_logs
+            if datetime.strptime(row[1], '%Y-%m-%d') >= week_ago
         ]
 
-        summary_sheet.append_row(summary_row)
+        # Calculate total sleep and total feed (in ml)
+        total_sleep = sum(
+            float(row[2]) for row in recent_logs if row[2].strip()
+        )
 
-    print(Fore.GREEN + "✅ Summary updated successfully!" + Style.RESET_ALL)
+        total_feed = sum(
+            float(row[3]) for row in recent_logs if row[3].strip()
+        )
+
+        # Count milestones this week for user
+        user_milestones = [row for row in milestone_rows if row[0] == username]
+        recent_milestones = [
+            row for row in user_milestones
+            if datetime.strptime(row[1], '%Y-%m-%d') >= week_ago
+        ]
+        milestones_count = len(recent_milestones)
+
+        # Get latest growth record for user
+        user_growth = [row for row in growth_rows if row[0] == username]
+        if user_growth:
+            user_growth.sort(
+                key=lambda x: datetime.strptime(x[1], '%Y-%m-%d'),
+                reverse=True
+            )
+            latest_weight = user_growth[0][2]
+            latest_height = user_growth[0][3]
+        else:
+            latest_weight = ""
+            latest_height = ""
+
+        # Append summary row
+        summary_sheet.append_row([
+            username,
+            round(total_sleep, 2),
+            round(total_feed, 2),
+            milestones_count,
+            latest_weight,
+            latest_height
+        ])
+
+    print(
+        Fore.GREEN
+        + "✅ Summary sheet updated successfully!"
+        + Style.RESET_ALL
+    )
 
 
 def main():
