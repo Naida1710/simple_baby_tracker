@@ -385,7 +385,6 @@ def log_growth_data():
         if is_username_taken(username):
             break
         else:
-
             print(
                 Fore.RED
                 + "Username not found. Please try again."
@@ -554,7 +553,6 @@ def log_milestones():
     new_row = [username, data["log_date"], data["milestone"]]
     milestones.append_row(new_row)
     print(Fore.GREEN + "\n✅ Milestone saved successfully!" + Style.RESET_ALL)
-    update_summary()
 
 
 def update_summary():
@@ -592,11 +590,13 @@ def update_summary():
             float(row[3]) for row in recent_logs if row[3].strip()
         )
 
-        # Count milestones this week for user
+        # Count milestones this week for user, exclude "None" or empty
         user_milestones = [row for row in milestone_rows if row[0] == username]
         recent_milestones = [
             row for row in user_milestones
             if datetime.strptime(row[1], '%Y-%m-%d') >= week_ago
+            and row[2].strip().lower() != "none"
+            and row[2].strip() != ""
         ]
         milestones_count = len(recent_milestones)
 
