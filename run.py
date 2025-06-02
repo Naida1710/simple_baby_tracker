@@ -24,7 +24,7 @@ summary_sheet = SHEET.worksheet('summary')
 
 
 def log_exists(sheet, username, log_date):
-    records = sheet.get_all_values()[1:]  # skip header
+    records = sheet.get_all_values()[1:]
     for row in records:
         if row[0] == username and row[1] == log_date:
             return True
@@ -372,7 +372,6 @@ def log_daily_baby_data():
         int(data["wet_diapers"]),
         int(data["dirty_diapers"])
     ]
-
     daily_logs.append_row(new_row)
     print(Fore.GREEN + "✅ Daily log saved successfully!" + Style.RESET_ALL)
 
@@ -554,9 +553,8 @@ def update_summary():
     summary_sheet.clear()
 
     headers = ["Username", "Total Sleep This Week", "Average Feed (ml)",
-               "Milestones Achieved", "Latest Weight",
-               "Latest Height"]
-    summary_sheet.clear()
+               "Milestones Achieved", "Latest Weight", "Latest Height"]
+
     summary_sheet.append_row(headers)
 
     today = datetime.today()

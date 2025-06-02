@@ -200,6 +200,9 @@ These improve usability and reduce frustration during data entry.
 * BUG: "None" Milestone - When I entered None in the milestone input, the app still counted it as a valid milestone entry in the summary, inflating the count.The milestone logging function did not properly validate user input. The input 'None' was being appended to the milestone log and later included in summary statistics.
 **FIX**: I added input validation to check for 'None' before saving a milestone.
 
+* BUG: Duplicate log_date Prevention - In the log_milestones(), log_growth(), log_daily_baby_data() functions, a bug was fixed that previously allowed users to log multiple milestones and other information for the same date under the same username. This could lead to confusion and data inconsistencies.
+**FIX**:  Now, before saving a milestone, the function checks if a milestone for the given username and date already exists. If a duplicate is found, the user is informed with a clear error message and prompted to enter a different date. This prevents accidental overwriting or multiple entries for the same milestone, growth or daily data dates, ensuring cleaner and more accurate logs.
+
 ### Unfixed Bugs
 
 As of the latest testing, no bugs have been identified. The website is functioning as expected, to the best of my knowledge.
