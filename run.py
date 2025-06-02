@@ -128,7 +128,6 @@ def add_new_user():
 
     steps = [
         {"key": "username", "prompt": "Username", "allow_back": False},
-        {"key": "password", "prompt": "Password"},
         {"key": "baby_name", "prompt": "Baby Name"},
         {"key": "baby_dob", "prompt": "Baby DOB (YYYY-MM-DD)"},
         {"key": "birth_weight", "prompt": "Birth Weight (kg)"},
@@ -188,7 +187,6 @@ def add_new_user():
     baby_age_months = calculate_age_months(data["baby_dob"])
     new_row = [
         data["username"],
-        data["password"],
         data["baby_name"],
         data["baby_dob"],
         str(baby_age_months),
@@ -210,8 +208,6 @@ def add_new_user():
 
 
 def login():
-    BOLD = "\033[1m"
-    RESET = "\033[0m"
     print(
         Fore.CYAN
         + "\n________________________________________________________________"
@@ -220,6 +216,7 @@ def login():
     print()
     print(Fore.CYAN + "Please log in:" + Style.RESET_ALL
           )
+
     while True:
         username = user_input("Username", allow_back=False, allow_quit=True)
         if username == 'b':
@@ -231,70 +228,40 @@ def login():
                 + Style.RESET_ALL
             )
         else:
-            break
-
-    while True:
-        password = user_input("Password", allow_back=False, allow_quit=True)
-        if password == 'b':
-            return login()
-        if verify_password(username, password):
             print(
-                Fore.CYAN
-                + "\n"
-                + "________________________________________________"
-                + "________________"
-                + Style.RESET_ALL
-            )
-            print()
-            print(
-                Fore.GREEN + BOLD
+                Fore.GREEN
                 + "Login successful!"
-                + RESET + Style.RESET_ALL
+                + Style.RESET_ALL
             )
             print(
                 Fore.CYAN
-                + BOLD
-                + f"\nHello, {username}, welcome back!"
-                + RESET
+                + f"Hello, {username}, welcome back!"
                 + Style.RESET_ALL
             )
-            print(Fore.CYAN + "Let’s take a look at your profile "
-                  "and current summary sheet." + Style.RESET_ALL)
             return username
-        else:
-            print(
-                Fore.RED
-                + "Incorrect password. Please try again."
-                + Style.RESET_ALL
-            )
 
 
-def log_daily_baby_data():
-    print("\n--- Log Daily Baby Data ---")
+def log_daily_baby_data(current_user):
+    print(f"\n--- Log Daily Baby Data for {current_user} ---")
 
     steps = [
-        {
-            "key": "username",
-            "prompt": "Enter your username",
-            "allow_back": False,
-        },
         {
             "key": "log_date",
             "prompt": "Log Date (YYYY-MM-DD)",
             "allow_back": True,
         },
-
         {"key": "sleep_hours", "prompt": "Sleep (hours)", "allow_back": True},
         {"key": "feed_ml", "prompt": "Feed (ml)", "allow_back": True},
         {"key": "wet_diapers", "prompt": "Wet Diapers", "allow_back": True},
         {
             "key": "dirty_diapers",
             "prompt": "Dirty Diapers",
-            "allow_back": True
+            "allow_back": True,
         },
+
     ]
 
-    data = {}
+    data = {"username": current_user}  # set username once here
     current_step = 0
 
     while current_step < len(steps):
@@ -309,7 +276,7 @@ def log_daily_baby_data():
             if current_step == 0:
                 print(
                     Fore.RED
-                    + "Cannot go back from username input."
+                    + "Cannot go back from the log date input."
                     + Style.RESET_ALL
                 )
                 continue
@@ -317,26 +284,18 @@ def log_daily_baby_data():
                 current_step -= 1
                 continue
 
-        if key == "username":
-            if not is_username_taken(response):
-                print(
-                    Fore.RED
-                    + "Username not found. Please try again."
-                    + Style.RESET_ALL
-                )
-                continue
-        elif key == "log_date":
+        if key == "log_date":
             try:
                 datetime.strptime(response, "%Y-%m-%d")
             except ValueError:
                 print(Fore.RED + "Invalid date format." + Style.RESET_ALL)
                 continue
 
-            if log_exists(daily_logs, data["username"], response):
+            if log_exists(daily_logs, current_user, response):
                 print(
                     Fore.RED
                     + f"🚫 Daily log for {response} already exists. "
-                    "Please choose another date."
+                      "Please choose another date."
                     + Style.RESET_ALL
                 )
                 continue
@@ -462,11 +421,11 @@ def show_user_profile(username):
     for row in records:
         if row[0] == username:
             print(f"Username: {row[0]}")
-            print(f"Baby Name: {row[2]}")
-            print(f"Date of Birth: {row[3]}")
-            print(f"Age (months): {row[4]}")
-            print(f"Birth Weight: {row[5]} kg")
-            print(f"Birth Height: {row[6]} cm")
+            print(f"Baby Name: {row[1]}")
+            print(f"Date of Birth: {row[2]}")
+            print(f"Age (months): {row[3]}")
+            print(f"Birth Weight: {row[4]} kg")
+            print(f"Birth Height: {row[5]} cm")
             return
     print(Fore.RED + "Profile not found." + Style.RESET_ALL)
 
@@ -730,11 +689,12 @@ def main():
                     + Style.RESET_ALL
                     )
         elif choice == '2':
-            logged_in_user = login()
-            if logged_in_user:
-                show_user_profile(logged_in_user)
+            current_user = login()
+            if current_user:
+                log_daily_baby_data(current_user)
+                show_user_profile(current_user)
                 update_summary()
-                display_user_summary(logged_in_user)
+                display_user_summary(current_user)
                 print(
                     Fore.CYAN
                     + "\n________________________________________"
