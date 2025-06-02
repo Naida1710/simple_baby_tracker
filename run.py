@@ -696,10 +696,11 @@ def main():
         )
 
         if choice == '1':
-            if add_new_user():
-                log_daily_baby_data()
-                log_growth_data()
-                log_milestones()
+            current_user = add_new_user()
+            if current_user:
+                log_daily_baby_data(current_user)
+                log_growth_data(current_user)
+                log_milestones(current_user)
                 print(
                     Fore.BLUE
                     + "Thank you for logging your baby's data, "
