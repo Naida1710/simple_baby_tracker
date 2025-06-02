@@ -559,8 +559,9 @@ def update_summary():
     print("\n--- LOADING SUMMARY SHEET... ---")
     summary_sheet.clear()
 
-    headers = ["Username", "Total Sleep This Week", "Total Feed (ml)",
-               "Milestones Achieved", "Latest Weight", "Latest Height"]
+    headers = ["Username", "Total Sleep (hrs)", "Total Feed (ml)",
+               "Milestones Achieved", "Latest Weight", "Latest Height",
+               "Total Wet Diapers", "Total Dirty Diapers"]
     summary_sheet.append_row(headers)
 
     today = datetime.today()
@@ -588,6 +589,14 @@ def update_summary():
 
         total_feed = sum(
             float(row[3]) for row in recent_logs if row[3].strip()
+        )
+
+        # Calculate total wet and dirty diapers in last 7 days
+        total_wet_diapers = sum(
+            int(row[4]) for row in recent_logs if row[4].strip()
+        )
+        total_dirty_diapers = sum(
+            int(row[5]) for row in recent_logs if row[5].strip()
         )
 
         # Count milestones this week for user, exclude "None" or empty
@@ -620,7 +629,9 @@ def update_summary():
             round(total_feed, 2),
             milestones_count,
             latest_weight,
-            latest_height
+            latest_height,
+            total_wet_diapers,
+            total_dirty_diapers
         ])
 
     print(
