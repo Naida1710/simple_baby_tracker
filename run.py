@@ -335,24 +335,18 @@ def log_daily_baby_data(current_user):
     print(Fore.GREEN + "✅ Daily log saved successfully!" + Style.RESET_ALL)
 
 
-def log_growth_data():
-    print("\n--- Log Growth Data ---")
-
-    while True:
-        username = user_input("Enter your username", allow_back=False)
-        if is_username_taken(username):
-            break
-        else:
-            print(
-                Fore.RED
-                + "Username not found. Please try again."
-                + Style.RESET_ALL
-            )
+def log_growth_data(current_user):
+    print(f"\n--- Log Growth Data for {current_user} ---")
 
     steps = [
-        {"key": "log_date", "prompt": "Log Date (YYYY-MM-DD)"},
-        {"key": "weight", "prompt": "Weight (kg)"},
-        {"key": "height", "prompt": "Height (cm)"},
+        {
+            "key": "log_date",
+            "prompt": "Log Date (YYYY-MM-DD)",
+            "allow_back": True,
+        },
+
+        {"key": "weight", "prompt": "Weight (kg)", "allow_back": True},
+        {"key": "height", "prompt": "Height (cm)", "allow_back": True},
     ]
 
     data = {}
@@ -362,18 +356,17 @@ def log_growth_data():
         step = steps[current_step]
         key = step["key"]
         prompt = step["prompt"]
+        allow_back = step.get("allow_back", False)
 
-        response = user_input(prompt, allow_back=True)
+        response = user_input(prompt, allow_back=allow_back)
 
         if response == 'b':
             if current_step == 0:
-                username = user_input("Enter your username", allow_back=False)
-                if not is_username_taken(username):
-                    print(Fore.RED + "Username not found." + Style.RESET_ALL)
-                    # stay on username input
-                    continue
-                data = {}
-                current_step = 0
+                print(
+                    Fore.RED
+                    + "Cannot go back from the log date input."
+                    + Style.RESET_ALL
+                )
                 continue
             else:
                 current_step -= 1
@@ -386,12 +379,12 @@ def log_growth_data():
                 print(Fore.RED + "Invalid date format." + Style.RESET_ALL)
                 continue
 
-            if log_exists(growth, username, response):
+            if log_exists(growth, current_user, response):
                 print(
-                    Fore.RED +
-                    f"🚫 Growth log for {response} already exists. "
-                    "Please choose another date." +
-                    Style.RESET_ALL
+                    Fore.RED
+                    + f"🚫 Growth log for {response} already exists. "
+                    "Please choose another date."
+                    + Style.RESET_ALL
                 )
                 continue
         elif key in ["weight", "height"]:
@@ -408,8 +401,12 @@ def log_growth_data():
         data[key] = response
         current_step += 1
 
-    new_row = [username, data["log_date"],
-               float(data["weight"]), float(data["height"])]
+    new_row = [
+        current_user,
+        data["log_date"],
+        float(data["weight"]),
+        float(data["height"]),
+    ]
     growth.append_row(new_row)
     print(Fore.GREEN + "✅ Growth data saved successfully!" + Style.RESET_ALL)
 
@@ -608,6 +605,36 @@ def update_summary():
     )
 
 
+def main_menu(current_user):
+    BOLD = "\033[1m"
+    RESET = "\033[0m"
+    while True:
+        print()
+        print(Fore.CYAN + "Choose an option:" + Style.RESET_ALL)
+        print("1. Log Daily Baby Data")
+        print("2. Log Growth Data")
+        print("3. Log Milestones")
+        print("4. Quit")
+
+        choice = user_input("Enter 1–4", allow_back=False, allow_quit=False)
+
+        if choice == '1':
+            log_daily_baby_data(current_user)
+        elif choice == '2':
+            log_growth_data(current_user)
+        elif choice == '3':
+            log_milestones(current_user)
+        elif choice == '4':
+            print(Fore.BLUE + BOLD + "GOODBYE!" + RESET + Style.RESET_ALL)
+            return  # Exit menu
+        else:
+            print(
+                Fore.RED
+                + "Invalid option. Please enter a number between 1 and 4."
+                + Style.RESET_ALL
+            )
+
+
 def main():
     BOLD = "\033[1m"
     RESET = "\033[0m"
@@ -680,18 +707,17 @@ def main():
                     + "Goodbye!"
                     + Style.RESET_ALL
                 )
-
                 return
             else:
                 print(
                     Fore.RED
                     + "Registration failed. Try again."
                     + Style.RESET_ALL
-                    )
+                )
+
         elif choice == '2':
             current_user = login()
             if current_user:
-                log_daily_baby_data(current_user)
                 show_user_profile(current_user)
                 update_summary()
                 display_user_summary(current_user)
@@ -706,55 +732,63 @@ def main():
                     Fore.GREEN
                     + "You may now access the main menu."
                     + Style.RESET_ALL
-                    )
-                break
+                )
+
+                while True:
+                    print()
+                    print(Fore.CYAN + "Choose an option:" + Style.RESET_ALL)
+                    print("1. Log Daily Baby Data")
+                    print("2. Log Growth Data")
+                    print("3. Log Milestones")
+                    print("4. Quit")
+
+                    menu_choice = user_input("Enter 1–4",
+                                             allow_back=False,
+                                             allow_quit=False)
+
+                    if menu_choice == '1':
+                        log_daily_baby_data(current_user)
+                    elif menu_choice == '2':
+                        log_growth_data(current_user)
+                    elif menu_choice == '3':
+                        log_milestones(current_user)
+                    elif menu_choice == '4':
+                        print(
+                            Fore.BLUE
+                            + BOLD + "GOODBYE!" + RESET
+                            + Style.RESET_ALL
+                        )
+                        break
+                    else:
+                        print(
+                            Fore.RED
+                            + "Invalid option. "
+                            "Please enter a number between 1 and 4."
+                            + Style.RESET_ALL
+                        )
             else:
                 print(
                     Fore.RED
                     + "Login failed. Please try again."
                     + Style.RESET_ALL
-                    )
+                )
+
         elif choice == '3':
             print(Fore.BLUE + BOLD + "GOODBYE!" + RESET + Style.RESET_ALL)
             return
+
         else:
             print(
                 Fore.RED
                 + "Invalid input. Please enter 1, 2, or 3."
                 + Style.RESET_ALL
-                )
+            )
 
         print(
             Fore.CYAN
             + "\n____________________________________________________________"
             + Style.RESET_ALL
         )
-
-    while True:
-        print()
-        print(Fore.CYAN + "Choose an option:" + Style.RESET_ALL)
-        print("1. Log Daily Baby Data")
-        print("2. Log Growth Data")
-        print("3. Log Milestones")
-        print("4. Quit")
-
-        choice = user_input("Enter 1–4", allow_back=False, allow_quit=False)
-
-        if choice == '1':
-            log_daily_baby_data()
-        elif choice == '2':
-            log_growth_data()
-        elif choice == '3':
-            log_milestones()
-        elif choice == '4':
-            print(Fore.BLUE + BOLD + "GOODBYE!" + RESET + Style.RESET_ALL)
-            break
-        else:
-            print(
-                Fore.RED
-                + "Invalid option. Please enter a number between 1 and 5."
-                + Style.RESET_ALL
-                )
 
 
 if __name__ == "__main__":
