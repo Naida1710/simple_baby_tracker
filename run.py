@@ -532,6 +532,14 @@ def log_milestones():
             except ValueError:
                 print(Fore.RED + "Invalid date format." + Style.RESET_ALL)
                 continue
+            if log_exists(milestones, username, response):
+                print(
+                    Fore.RED +
+                    f"🚫 A milestone log for {response} already exists. "
+                    "Please choose another date." +
+                    Style.RESET_ALL
+                )
+                continue
 
         data[key] = response
         current_step += 1
