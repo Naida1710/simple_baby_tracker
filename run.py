@@ -425,6 +425,15 @@ def log_growth_data():
             except ValueError:
                 print(Fore.RED + "Invalid date format." + Style.RESET_ALL)
                 continue
+
+            if log_exists(growth, username, response):
+                print(
+                    Fore.RED +
+                    f"🚫 Growth log for {response} already exists. "
+                    "Please choose another date." +
+                    Style.RESET_ALL
+                )
+                continue
         elif key in ["weight", "height"]:
             try:
                 float(response)
