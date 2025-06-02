@@ -554,8 +554,9 @@ def update_summary():
     summary_sheet.clear()
 
     headers = ["Username", "Total Sleep This Week", "Average Feed (ml)",
-               "Milestones Achieved", "Notes", "Latest Weight",
+               "Milestones Achieved", "Latest Weight",
                "Latest Height"]
+    summary_sheet.clear()
     summary_sheet.append_row(headers)
 
     today = datetime.today()
@@ -604,14 +605,11 @@ def update_summary():
                     latest_weight = g_row[2]
                     latest_height = g_row[3]
 
-        notes = ""
-
         summary_row = [
             username,
             sleep_sum,
             avg_feed,
             len(user_milestones),
-            notes,
             latest_weight or "",
             latest_height or ""
         ]
