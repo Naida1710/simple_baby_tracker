@@ -253,6 +253,15 @@ Steps for deployment:
 16. Click "Enable automatic deploys" or manually deploy by choosing "Deploy branch".
 17. Click "Deploy branch".
 
+## Local Deployment 
+
+This project can be cloned or forked in order to make a local copy on your own system.
+
+For either method, you will need to install any applicable packages found within the requirements.txt file.
+
+pip3 install -r requirements.txt.
+If using any confidential credentials, such as CREDS.json or env.py data, these will need to be manually added to your own newly created project as well.
+
 
 ## Forking and Cloning
 To fork this repository:
@@ -268,6 +277,14 @@ To Clone:
 3. Copy the HTTPS link: 
 4. Open your terminal and type: git clone 
 
+## Create a Virtual Environment (using VS code)
+
+Open the Command Palette (Ctrl + Shift + P on Windows or Cmd + Shift + P on macOS).
+In the Command Palette type: Python: Create Environment.
+Select Python: Create Environment from the list.
+Select Venv from the drop down menu.
+Check that your environment is active by editing an .py file and looking for ('venv': venv) near the bottom right hand corner of the screen.
+
 ## Technology Used
 
 * Visual Studio Code with assistance of flake8 linter extension.
@@ -280,7 +297,7 @@ To Clone:
 ## Python Version, Packages and Libaries Used
 The project was developed using Python 3.13.2.
 
-The following Python packages and libaries were used:
+I've used the following Python packages and/or external imported packages:
 * datetime - Used to work with date and time, particulary to calculate recovery timelines based on number of days since surgery.
 * gspread - Used to interact with Google Sheets API for reading and writing data to a spreadsheet.
 * google.oauth2.service_account.Credentials - Provides secure authentication for access to Google Sheets API.
