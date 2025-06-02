@@ -374,7 +374,6 @@ def log_daily_baby_data():
     ]
     daily_logs.append_row(new_row)
     print(Fore.GREEN + "✅ Daily log saved successfully!" + Style.RESET_ALL)
-    update_summary()
 
 
 def log_growth_data():
@@ -454,7 +453,6 @@ def log_growth_data():
                float(data["weight"]), float(data["height"])]
     growth.append_row(new_row)
     print(Fore.GREEN + "✅ Growth data saved successfully!" + Style.RESET_ALL)
-    update_summary()
 
 
 def show_user_profile(username):
@@ -506,8 +504,18 @@ def log_milestones():
             break
 
     steps = [
-        {"key": "log_date", "prompt": "Log Date (YYYY-MM-DD)"},
-        {"key": "milestone", "prompt": "Describe the milestone"}
+        {
+            "key": "log_date",
+            "prompt": "Log Date (YYYY-MM-DD)",
+            "allow_back": True,
+        },
+
+        {
+            "key": "milestone",
+            "prompt": "Describe the milestone",
+            "allow_back": False
+        }
+
     ]
 
     data = {}
@@ -518,7 +526,7 @@ def log_milestones():
         key = step["key"]
         prompt = step["prompt"]
 
-        response = user_input(prompt, allow_back=True)
+        response = user_input(prompt, allow_back=False)
 
         if response == 'b':
             if current_step == 0:
