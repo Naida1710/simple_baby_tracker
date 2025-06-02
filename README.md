@@ -178,11 +178,13 @@ These improve usability and reduce frustration during data entry.
 
 ## Future Features
 
+- I was wondering whether I should add hints about the amount of food or sleep a child needs each month so that parents would aim for that, but I decided not to include it in future plans because every child is different and each has different needs and doctor recommendations.
 - Allow users to create profiles for multiple babies under the same account.
 - Auto-save progress every few inputs to prevent data loss if the program closes unexpectedly.
 - Record the exact time for each data entry, not just the date.
 - Add password reset option.
 - Allow users to export their baby’s logged data as CSV or simple text reports.
+- Add the function to View Today's Summary for the Logged-in Users.
 
 ## Bugs
 
@@ -315,7 +317,7 @@ https://www.canva.com/dream-lab
 
 - I'm really grateful to my mentor, Dick Vlaanderen, for sharing helpful advice and thoughtful suggestions throughout the project.
 
-- I’d like to thank my husband for his unwavering support, especially for patiently taking care of our nine- month-old baby while I was working on my projects.
+- I’d like to thank my husband for his unwavering support, especially for patiently taking care of our nine- month-old baby while I was working on my project.
 
 
 
