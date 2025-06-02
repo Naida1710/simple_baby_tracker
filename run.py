@@ -23,6 +23,14 @@ milestones = SHEET.worksheet('milestones')
 summary_sheet = SHEET.worksheet('summary')
 
 
+def log_exists(sheet, username, log_date):
+    records = sheet.get_all_values()[1:]  # skip header
+    for row in records:
+        if row[0] == username and row[1] == log_date:
+            return True
+    return False
+
+
 def user_input(prompt, allow_back=True, allow_quit=True):
     BOLD = "\033[1m"
     RESET = "\033[0m"
@@ -323,6 +331,15 @@ def log_daily_baby_data():
             except ValueError:
                 print(Fore.RED + "Invalid date format." + Style.RESET_ALL)
                 continue
+
+            if log_exists(daily_logs, data["username"], response):
+                print(
+                    Fore.RED
+                    + f"🚫 Daily log for {response} already exists. "
+                    "Please choose another date."
+                    + Style.RESET_ALL
+                )
+                continue
         elif key in ["sleep_hours", "feed_ml"]:
             try:
                 float(response)
@@ -345,15 +362,6 @@ def log_daily_baby_data():
                 continue
 
         data[key] = response
-
-        if log_exists(daily_logs, data["username"], data["log_date"]):
-            print(
-                Fore.RED
-                + f"Daily log for {data['log_date']} already exists."
-                + Style.RESET_ALL
-            )
-            return
-
         current_step += 1
 
     new_row = [
@@ -470,15 +478,6 @@ def display_user_summary(username):
     print(Fore.RED + "No summary data found." + Style.RESET_ALL)
 
 
-def log_exists(worksheet, username, log_date):
-    """Check if a log for the given username and date already exists."""
-    records = worksheet.get_all_values()[1:]  # skip header
-    for row in records:
-        if row[0] == username and row[1] == log_date:
-            return True
-    return False
-
-
 def log_milestones():
     print("\n--- Log Baby Milestone ---")
 
@@ -526,15 +525,6 @@ def log_milestones():
                 continue
 
         data[key] = response
-
-        if log_exists(milestones, username, data["log_date"]):
-            print(
-                Fore.RED
-                + f"You've already logged a milestone for {data['log_date']}."
-                + Style.RESET_ALL
-            )
-            return
-
         current_step += 1
 
     new_row = [username, data["log_date"], data["milestone"]]
