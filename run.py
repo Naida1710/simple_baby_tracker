@@ -3,6 +3,7 @@ from google.oauth2.service_account import Credentials
 from datetime import datetime, timedelta
 import sys
 from colorama import init, Fore, Style
+
 init(autoreset=True)
 
 SCOPE = [
@@ -84,7 +85,8 @@ def add_new_user():
 
     print(
         Fore.CYAN
-        + "\n________________________________________________________________"
+        +
+        "\n________________________________________________________________"
         + Style.RESET_ALL
     )
     print(
