@@ -211,7 +211,7 @@ def add_new_user():
           + Style.RESET_ALL
     )
 
-    return True
+    return data["username"]
 
 
 def login():
@@ -235,11 +235,19 @@ def login():
                 + Style.RESET_ALL
             )
         else:
+            print()
             print(
                 Fore.GREEN
                 + "Login successful!"
                 + Style.RESET_ALL
             )
+            print(
+                Fore.CYAN
+                + "\n___________________________________________"
+                "_____________________"
+                + Style.RESET_ALL
+            )
+            print()
             print(
                 Fore.CYAN
                 + f"Hello, {username}, welcome back!"
@@ -249,13 +257,15 @@ def login():
 
 
 def log_daily_baby_data(current_user):
+
+    print()
     print(f"\n--- Log Daily Baby Data for {current_user} ---")
 
     steps = [
         {
             "key": "log_date",
             "prompt": "Log Date (YYYY-MM-DD)",
-            "allow_back": True,
+            "allow_back": False,
         },
         {"key": "sleep_hours", "prompt": "Sleep (hours)", "allow_back": True},
         {"key": "feed_ml", "prompt": "Feed (ml)", "allow_back": True},
@@ -349,7 +359,7 @@ def log_growth_data(current_user):
         {
             "key": "log_date",
             "prompt": "Log Date (YYYY-MM-DD)",
-            "allow_back": True,
+            "allow_back": False,
         },
 
         {"key": "weight", "prompt": "Weight (kg)", "allow_back": True},
@@ -471,7 +481,7 @@ def log_milestones(current_user):
         },
         {
             "key": "milestone",
-            "prompt": "Describe the milestone",
+            "prompt": "Describe the milestone (e.g., babbling)",
             "allow_back": False
         }
     ]
@@ -618,7 +628,7 @@ def main_menu(current_user):
         print("3. Log Milestones")
         print("4. Quit")
 
-        choice = user_input("Enter 1–4", allow_back=False, allow_quit=True)
+        choice = user_input("Enter 1–4", allow_back=False, allow_quit=False)
 
         if choice == '1':
             log_daily_baby_data(current_user)
@@ -730,7 +740,12 @@ def main():
                 show_user_profile(current_user)
                 update_summary()
                 display_user_summary(current_user)
-                
+                print(
+                    Fore.CYAN
+                    + "\n_______________________________________"
+                    "_________________________"
+                    + Style.RESET_ALL
+                )
                 print()  # blank line for spacing
                 print(
                     Fore.GREEN

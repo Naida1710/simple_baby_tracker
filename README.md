@@ -93,7 +93,7 @@ It collects baby name, date of birth (validated to ensure proper date format), b
 It automatically computes baby age in months from date of birth.
 It saves all this info in the user_info worksheet.
 It ensures all fields are entered correctly before saving, prompting users to correct mistakes.
-Each input field clearly displays instructions including options to quit ('q') or go back ('b'), allowing flexible and error-tolerant data entry.
+Users can quit or go back at any point during data entry, except at the very first prompt (the username input), where going back is not applicable since it is the start of the interaction.
 After completing the registration process, users receive an explicit success message (✅ Registration successful!) confirming their profile has been created.
 This feedback reassures users that their information was saved correctly and they can proceed confidently to log in or add more data.
 
@@ -103,99 +103,119 @@ This ensures accurate baseline data for each baby.
 
 5. Personalized Welcome After Registration 
 
-![UserInfo](assets/images/User_info.png)
+After successful registration, the app greets the user by name (e.g., "Hello, (username)! 🎉"), creating a warm and welcoming experience. Once basic baby details are entered, the app seamlessly guides the user to begin daily logging—making the transition into the main tracking features intuitive and friendly.
 
-4. Daily Baby Data Logging
+![Greeting](assets/images/greetings.png)
 
-**Data Fields**: Users input daily:
+4. Daily Baby Data Logging, Growth Data Logging and Milestone Logging
+
+Users input daily:
 - Date (validated)
 - Sleep duration (hours, numeric)
 - Feeding amount (ml, numeric)
 - Wet diapers count (numeric)
 - Dirty diapers count (numeric)
 
-**Input Checking**: Validates every input for correct format and numeric values.
-**Data Storage**: Appends data to the daily_logs worksheet.
-**Flexible Input**: Users can quit or backtrack during entry.
-
-Allows daily tracking of baby’s routine for better monitoring.
-
-5. Growth Data Logging
-
-Data Captured:
+Growth Data Captured:
 - Date of measurement
 - Baby’s weight (kg)
 - Baby’s height (cm)
 
-**Validation**: Ensures date is formatted correctly and measurements are positive numbers.
-**Storage**: Adds records to the growth worksheet.
-
-Provides longitudinal tracking of baby’s physical growth milestones.
-
-6. Milestone Logging
-
-**Milestone Tracking**: Allows users to log developmental milestones with:
-- Date achieved
+- Milestone Date achieved
 - Description of milestone (e.g., “First smile”, “Crawling”)
 
-**Validation**: Checks for valid date entries.
-**Storage**: Saves milestones to the milestones worksheet.
+I want the user to be able to type 'q' to quit everywhere and 'b' to go back everywhere except the very first prompt of the log data entry (e.g., the date input in log_daily_baby_data, log_growth_data, log_milestones),since it is the start of the interaction. 
+The Log Baby Milestone feature consists of just one prompt for the date and one for the description, making it simple and efficient. Since it's a short flow, there is no option to go back ('b'); users can still quit at any time using 'q'.
+**Describe the milestone (e.g., “babbling”) (or type 'q' to quit):** - offers more clarity by giving complete and relatable examples of baby milestones, helping users understand what kind of input is expected.
+The app automatically checks if a log already exists for the selected date to avoid duplicate entries
+Upon successful submission, the app provides a clear visual confirmation messages.
 
-Helps parents keep track of important baby achievements.
+![Logs](assets/images/logs.png)
 
-7. User Profile Display
+5. Goodbye Message
 
-**Overview**: Shows a summary of the logged-in user’s and baby’s details:
-- Username
-- Baby name
-- Date of birth
-- Baby’s current age (in months)
-- Birth weight and height
+After successfully logging daily baby data, growth metrics, and milestones, the app provides a clear and warm farewell message.
+This message confirms that:
+- All relevant data has been recorded and saved.
+- The session is ending gracefully.
+- Users feel a sense of completion and reassurance that their entries were successful.
 
-Gives quick access to personal and baby info.
+It adds a personal touch and improves user experience by clearly signaling the end of the logging process.
 
-8. User Summary Display
+![Goodbye](assets/images/goodbye.png)
 
-**Summary Overview**: Pulls data from the summary worksheet to show:
-- Total sleep over the past week
-- Average daily feeding amount
-- Number of milestones achieved recently
-- Latest weight and height recorded
-- Any additional notes
+6. Errors in typing
 
-**Helps Parents**: Provides at-a-glance insight into the baby’s recent progress.
+![UsernameTaken](assets/images/usernametaken.png)
+![DateNumeric](assets/images/date.png)
+![Questions](assets/images/questions.png)
+![NoUsername](assets/images/usernamenotfound.png)
 
-9. Summary Sheet Update
+The app checks for existing entries when logging daily data, growth, or milestones.
+This prevents duplicate entries and maintains data accuracy.
+Users can then enter a new date or quit the logging process.
+![DateExists](assets/images/dailylogexists.png)
 
-Automated Aggregation:
-- Calculates total sleep in last 7 days
-- Computes average feeding volume
-- Counts milestones recorded recently
-- Retrieves most recent growth measurements
 
-**Data Refresh**: Clears previous summary data and rewrites updated figures.
-**Keeps Summary Current**: Ensures parents always see up-to-date info.
+7. Back and Quit 
 
-This feature consolidates scattered data for meaningful insights.
+![quit](assets/images/quit.png)
+![back](assets/images/back.png)
 
-10. Enhanced Input Handling
 
-User-friendly Commands:
-- q to quit from prompts at any time.
-- b to go back to previous menu or input prompt.
+8. Returned User Login
 
-**Clear Instructions**: Prompts display available options explicitly.
+Upon starting the application, users are prompted with a Main Menu to identify themselves as a:
+- New User – to register a new profile.
+- Returning User – to log in and access previously saved data.
+- Quit – to exit the application.
+Users enter their previously registered username to log in.
+A success message confirms a valid login (e.g., Login successful!).
+All data logged previously under that username becomes accessible for viewing or updating.
+At any login prompt, users can type 'q' to gracefully exit the program.
 
-**Visual Feedback**: Uses colored console text with colorama:
+![ReturnedUser](assets/images/returneduser.png)
+
+9. Personalized Welcome Back Message
+
+After a successful login, returning users are greeted with a friendly, personalized message.
+This message confirms that the system has recognized the user and has loaded their baby’s profile and previous data.
+It enhances user experience by making the interaction feel warm and tailored.
+
+![WelcomeBack](assets/images/helloagain.png)
+
+10. User Profile & Summary View
+
+Upon login, the user is shown their personalized profile with essential baby information.
+Also, a summary sheet is generated and updated with the most recent data entries.
+
+![Profile](assets/images/profile.png)
+
+11. Main Menu Access 
+
+After successful login and summary display, users are directed to the Main Menu.
+A simple numeric menu allows users to select what type of data they wish to log.
+It gives a clean and intuitive navigation—no need to type additional commands like 'q' to quit here.
+Choosing 4 lets users exit the program gracefully.
+It ensures a clear transition from viewing data to updating or logging new entries. So, if the user does not want to enter growth data for today's login, they can simply skip to logging milestones instead.
+
+![MainMenu](assets/images/mainmenu.png)
+
+12. Exit And Goodbye Message
+
+Users can choose to quit the app anytime from the main menu by selecting option 4. Upon quitting, the app displays a clear and friendly goodbye message. This confirms the session has ended politely and cleanly.
+
+![Exit](assets/images/Exit.png)
+
+13. Visual Feedback 
+
+I used colored console text with colorama:
 - Green for success messages
 - Red for errors or invalid inputs
-- Yellow for warnings or info
+- Yellow for additional info and introductory texts
 - Blue for goodbye message
 - Cyan for instructions
-
-**Robust Validation**: Catches invalid inputs early and guides user to correct mistakes.
-
-These improve usability and reduce frustration during data entry.
+- Magenta for My Profile and Latest Summary Update Sheet
 
 ## Future Features
 
