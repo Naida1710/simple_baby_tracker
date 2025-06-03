@@ -228,7 +228,13 @@ I used colored console text with colorama:
 ![Users](assets/images/1.png)
 
 - daily_log 
+
+![Daily](assets/images/3.png)
+
 - growth
+
+![Growth](assets/images/3.png)
+
 - milestones
 
 - summary worksheet
