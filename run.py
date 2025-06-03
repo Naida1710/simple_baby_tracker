@@ -444,20 +444,9 @@ def display_user_summary(username):
     print(Fore.RED + "No summary data found." + Style.RESET_ALL)
 
 
-def log_milestones():
+def log_milestones(current_user):
     print("\n--- Log Baby Milestone ---")
-
-    # Loop until valid username entered
-    while True:
-        username = user_input("Enter your username", allow_back=False)
-        if not is_username_taken(username):
-            print(
-                Fore.RED
-                + "Username not found. Please try again."
-                + Style.RESET_ALL
-            )
-        else:
-            break
+    username = current_user
 
     steps = [
         {
