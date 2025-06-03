@@ -3,7 +3,7 @@
 ![Welcome to Simple Baby Tracker](assets/images/BabyTracker.png)
 
 Simple Baby Tracker is an interactive command-line baby tracking application implemented in Python and deployed via Code Institute's Heroku Terminal.
-The app is designed for new parents to easily log and monitor their baby's daily activities—such as sleep, feeding, and diaper changes—as well as track growth progress (weight and height) and developmental milestones. It features secure user registration and login, with built-in validation for usernames and passwords. While every parent receives recommendations from doctors about average sleep and feeding amounts per day, this app is intended solely to help parents conveniently track their baby's data. All data is securely stored using Google Sheets integration.
+The app is designed for new parents to easily log and monitor their baby's daily activities—such as sleep, feeding, and diaper changes—as well as track growth progress (weight and height) and developmental milestones. While every parent receives recommendations from doctors about average sleep and feeding amounts per day, this app is intended solely to help parents conveniently track their baby's data. All data is securely stored using Google Sheets integration.
 
 ## Objective
 The objective of the application is to help new parents who want a simple, non-app-based solution to track their baby's daily needs and development progress using just their computer and Google account.
@@ -46,6 +46,10 @@ The primary goal of the site owner is to empower new parents by offering a relia
 - I want to view summaries of sleep, feeding, and diaper data to spot patterns and track consistency.
 - I want to update milestones as my baby reaches new developments.
 - I want to log daily baby activities quickly by just using my username.
+
+## Flowchart
+
+![Flowchart](assets/images/flowchart.jpeg)
 
 ## Features
 
@@ -141,6 +145,7 @@ It adds a personal touch and improves user experience by clearly signaling the e
 The app checks for existing entries when logging daily data, growth, or milestones.
 This prevents duplicate entries and maintains data accuracy.
 Users can then enter a new date or quit the logging process.
+
 ![DateExists](assets/images/dailylogexists.png)
 
 Users can log developmental milestones for their baby, such as "first smile", "rolling over", or "babbling".
@@ -229,7 +234,7 @@ I used colored console text with colorama:
 - Allow users to create profiles for multiple babies under the same account.
 - Auto-save progress every few inputs to prevent data loss if the program closes unexpectedly.
 - Record the exact time for each data entry, not just the date.
-- Add password reset option.
+- Add password and password reset option (Although this option was initially included, but I removed it in agreement with my mentor.)
 - Allow users to export their baby’s logged data as CSV or simple text reports.
 - Add the function to View Today's Summary for the Logged-in Users.
 
@@ -260,7 +265,6 @@ As of the latest testing, no bugs have been identified. The website is functioni
 
 ### Manual Testing
 
-See [TESTING.md](TESTING.md) for more details of manual testing.
 Manual tests were carried out throughout the development process. Each feature was tested to ensure correct functionality, including error handling, user input validation, and support for multiple user accounts. This included:
 - Username and Name Validation: Inputs were tested to confirm that whitespace and special characters were not allowed. The username was validated to accept only 2–10 characters.
 - Password Validation: Password inputs were tested to ensure they were at least 6 characters long and contained no whitespace.
@@ -273,13 +277,6 @@ I used the **CI Python Linter** and followed the **PEP8 guidelines** to validate
 ![PythonLinter](assets/images/linter.png)
 
 As a result of the linting process, I made the following adjustments:
-
-1. Removed unnecessary blank lines and trailing white spaces.
-2. Ensured that all lines are under 79 characters, and limited docstring lines to 72 characters as recommended.
-3. Grouped imports in the correct order:
-- Standard library imports
-- Related third-party imports
-- Local application imports
 
 ![Run Python Linter](assets/run-python-linter.png)
 
@@ -307,16 +304,6 @@ Steps for deployment:
 16. Click "Enable automatic deploys" or manually deploy by choosing "Deploy branch".
 17. Click "Deploy branch".
 
-## Local Deployment 
-
-This project can be cloned or forked in order to make a local copy on your own system.
-
-For either method, you will need to install any applicable packages found within the requirements.txt file.
-
-pip3 install -r requirements.txt.
-If using any confidential credentials, such as CREDS.json or env.py data, these will need to be manually added to your own newly created project as well.
-
-
 ## Forking and Cloning
 To fork this repository:
 
@@ -341,12 +328,12 @@ Check that your environment is active by editing an .py file and looking for ('v
 
 ## Technology Used
 
-* Visual Studio Code with assistance of flake8 linter extension.
-* [Github](https://github.com/) to host the repository.
+* Visual Studio Code
+* GitHub
 * Git used for version control. (git add, git commit, git push)
-* The [CI Python Linter](https://pep8ci.herokuapp.com/#) for validating the Python code.
-* [Heroku](https://pep8ci.herokuapp.com/) for deploying the website.
-* Flow charts from [Lucid Chart](https://lucid.app).
+* CI Python Linter validating the Python code.
+* Heroku for deploying the website.
+* Flow charts from Lucid Chart app
 
 ## Python Version, Packages and Libaries Used
 The project was developed using Python 3.13.2.
