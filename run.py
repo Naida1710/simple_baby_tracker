@@ -748,7 +748,7 @@ def main():
                             + BOLD + "GOODBYE!" + RESET
                             + Style.RESET_ALL
                         )
-                        break
+                        return
                     else:
                         print(
                             Fore.RED
