@@ -227,19 +227,21 @@ I used colored console text with colorama:
 
 ![Users](assets/images/1.png)
 
-- daily_log 
+- daily_log worksheet
 
 ![Daily](assets/images/3.png)
 
-- growth
+- growth worksheet
 
-![Growth](assets/images/3.png)
+![Growthsheet](assets/images/4.png)
 
 - milestones
 
+![Milestonessheet](assets/images/2.png)
+
 - summary worksheet
 
-![Summary](assets/images/2.png)
+![Summary](assets/images/5.png.png)
 
 ## Future Features
 
