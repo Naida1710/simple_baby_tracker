@@ -14,7 +14,7 @@ The objective of the application is to help new parents who want a simple, non-a
 
 The primary goal of the site owner is to empower new parents by offering a reliable, user-friendly tool to track their baby’s daily habits and developmental progress. This baby tracker app serves as a digital companion during the early, often overwhelming stages of parenthood. As a parent of a newborn, I found it challenging to keep track of my baby’s daily needs and milestones while adjusting to a new routine. To solve this problem, I created a tool that not only helps other new parents, but also supports me in monitoring and understanding my baby's growth.
 
-- **Easy Access to Data**: I want all logs to be saved automatically and securely, giving parents access to their data anytime, anywhere.
+- **Easy Access to Data**: I want all logs to be saved automatically, giving parents access to their data anytime, anywhere.
 
 - **Better Awareness**: I want to help parents recognize patterns in sleep, feeding, diaper changes, and growth.
 
@@ -26,7 +26,7 @@ The primary goal of the site owner is to empower new parents by offering a relia
 
 - **Reduced Mental Load**: I want to support parents during a busy and emotional phase of life by simplifying the tracking process.
 
-- **Returning Users Login System**: I want enable returning users to access their past logs through a simple username and password login system.
+- **Returning Users Login System**: I want enable returning users to access their past logs through a simple username login system.
 
 - **Application Structure**: I want straightforward, well-structured questions that are easy for users to understand and answer.
 
@@ -40,18 +40,23 @@ The primary goal of the site owner is to empower new parents by offering a relia
 
 - **Know It’s Beginner-Friendly**: I want to feel reassured that no advanced technical skills are needed to use the app.
 
-- **Trust the Data Safety**: I want to gain confidence that data is securely stored in Google Sheets and easily accessible.
-
 #### Returning users
 
 - I want to feel supported by having one simple, organized place to manage my baby’s routine.
 - I want to view summaries of sleep, feeding, and diaper data to spot patterns and track consistency.
 - I want to update milestones as my baby reaches new developments.
-- I want to log daily baby activities quickly using my username and password to protect my information.
+- I want to log daily baby activities quickly by just using my username.
 
 ## Features
 
 ### User Registration
+
+1. Main welcome message
+
+The main welcome message is the friendly introductory text displayed before the program asks the user whether they are a new user or not. It helps set a positive tone and guides them on what to expect.
+
+![Welcome message](assets/images/Welcome%20message.png)
+
 
 1. Google Sheets Integration
 
@@ -65,24 +70,40 @@ The primary goal of the site owner is to empower new parents by offering a relia
 
 This structure keeps user's data organized and easily extendable.
 
-2. User Registration
+2. User Login System
 
-**Unique Usernames**: Checks if the chosen username already exists to avoid duplicates.
-**Baby Information**: Collects baby name, date of birth (validated to ensure proper date format), birth weight, and height.
-**Age Calculation**: Automatically computes baby age in months from date of birth.
-**Data Storage**: Saves all this info in the user_info worksheet.
-**Input Validation**: Ensures all fields are entered correctly before saving, prompting users to correct mistakes.
+When the program starts, it displays a prompt asking the user if they are a new user or a returning user. This helps guide users through the appropriate next steps.
+
+![Login](assets/images/log%20in.png)
+
+This user-friendly menu ensures that both new and returning users can easily access the application and manage their profiles or data accordingly.
+
+3. New User Welcome Message
+
+When a new user starts the app, a clear and friendly welcome message guides them through the registration process.
+It explains what information they need (e.g., baby’s birth date and stats), provides instructions on how to quit or go back during input, and sets expectations for what happens after registration (logging in, viewing profile, adding data).
+This feature ensures users feel supported and informed right from the start, improving onboarding and reducing confusion.
+
+![NewUserWelcomeMessage](assets/images/welcome%20message%202.png)
+
+4. User Registration
+
+It checks if the chosen username already exists to avoid duplicates.
+It collects baby name, date of birth (validated to ensure proper date format), birth weight, and height.
+It automatically computes baby age in months from date of birth.
+It saves all this info in the user_info worksheet.
+It ensures all fields are entered correctly before saving, prompting users to correct mistakes.
+Each input field clearly displays instructions including options to quit ('q') or go back ('b'), allowing flexible and error-tolerant data entry.
+After completing the registration process, users receive an explicit success message (✅ Registration successful!) confirming their profile has been created.
+This feedback reassures users that their information was saved correctly and they can proceed confidently to log in or add more data.
 
 This ensures accurate baseline data for each baby.
 
-3. User Login System
+![UserInfo](assets/images/User_info.png)
 
-**Username & Password Authentication**: Users log in with their username and password.
-**Error Handling**: Gives clear feedback if username does not exist or password is incorrect.
-**User-friendly Navigation**: Users can type q to quit or b to go back during input.
-**Session Management**: Once logged in, user session data is loaded for personalized interactions.
+5. Personalized Welcome After Registration 
 
-This keeps data secure and users clearly informed.
+![UserInfo](assets/images/User_info.png)
 
 4. Daily Baby Data Logging
 

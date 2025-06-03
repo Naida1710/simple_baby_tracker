@@ -196,6 +196,13 @@ def add_new_user():
     user_info.append_row(new_row)
 
     print(Fore.GREEN + "\n✅ Registration successful!" + Style.RESET_ALL)
+
+    print(
+        Fore.CYAN
+        + "\n________________________________________________________________"
+        + Style.RESET_ALL
+    )
+    print()
     print(Fore.CYAN + f"\nHello, {data['username']}! 🎉" + Style.RESET_ALL)
     print(
         Fore.CYAN
@@ -315,7 +322,7 @@ def log_daily_baby_data(current_user):
             except ValueError:
                 print(
                     Fore.RED
-                    + "Please enter an integer value."
+                    + "Please enter a valid number."
                     + Style.RESET_ALL
                 )
                 continue
@@ -447,18 +454,14 @@ def display_user_summary(username):
 def log_milestones(current_user):
     print("\n--- Log Baby Milestone ---")
 
-    # Loop until valid username entered
-    while True:
-        username = current_user
-
-        if not is_username_taken(username):
-            print(
-                Fore.RED
-                + "Username not found. Please try again."
-                + Style.RESET_ALL
-            )
-        else:
-            break
+    username = current_user
+    if not is_username_taken(username):
+        print(
+            Fore.RED
+            + "Username not found. Please try again."
+            + Style.RESET_ALL
+        )
+        return  # <== only return here if username not found
 
     steps = [
         {
@@ -466,13 +469,11 @@ def log_milestones(current_user):
             "prompt": "Log Date (YYYY-MM-DD)",
             "allow_back": True,
         },
-
         {
             "key": "milestone",
             "prompt": "Describe the milestone",
             "allow_back": False
         }
-
     ]
 
     data = {}
@@ -638,7 +639,7 @@ def main_menu(current_user):
 
 def main():
     BOLD = "\033[1m"
-    RESET = "\033[0m"           
+    RESET = "\033[0m"         
 
     print(
         Fore.CYAN +
@@ -648,6 +649,34 @@ def main():
     print(
         Fore.YELLOW
         + f"\n{BOLD}                WELCOME TO SIMPLE BABY TRACKER!{RESET}"
+        + Style.RESET_ALL
+    )
+
+    print(
+        Fore.YELLOW
+        + "\n⭐ This app helps you track your baby's data "
+        "during their 1st year."
+        + Style.RESET_ALL
+    )
+    print(
+        Fore.YELLOW
+        + "\n💚 Log daily activities, growth, and developmental "
+        "milestones."
+        + Style.RESET_ALL
+    )
+    print(
+        Fore.YELLOW
+        + "\n📊 Get weekly summaries to monitor progress and patterns."
+        + Style.RESET_ALL
+    )
+    print(
+        Fore.YELLOW
+        + "\n👶 Let's start tracking your little one's amazing progress!"
+        + Style.RESET_ALL
+    )
+    print(
+        Fore.CYAN
+        + "\n________________________________________________________________"
         + Style.RESET_ALL
     )
 
@@ -669,10 +698,18 @@ def main():
         )
 
         if choice == '1':
-            if add_new_user():
-                log_daily_baby_data()
-                log_growth_data()
-                log_milestones()
+            current_user = add_new_user()
+            if current_user:
+                log_daily_baby_data(current_user)
+                log_growth_data(current_user)
+                log_milestones(current_user)
+                print(
+                    Fore.CYAN
+                    + "\n_________________________________________________"
+                    "_______________"
+                    + Style.RESET_ALL
+                )
+                print()
                 print(
                     Fore.BLUE
                     + "Thank you for logging your baby's data, "
