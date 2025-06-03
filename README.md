@@ -241,7 +241,7 @@ I used colored console text with colorama:
 
 - summary worksheet
 
-![Summary](assets/images/5.png.png)
+![Summarysheet](assets/images/5.png)
 
 ## Future Features
 
@@ -280,10 +280,45 @@ As of the latest testing, no bugs have been identified. The website is functioni
 
 ### Manual Testing
 
-Manual tests were carried out throughout the development process. Each feature was tested to ensure correct functionality, including error handling, user input validation, and support for multiple user accounts. This included:
-- Username and Name Validation: Inputs were tested to confirm that whitespace and special characters were not allowed. The username was validated to accept only 2–10 characters.
-- Password Validation: Password inputs were tested to ensure they were at least 6 characters long and contained no whitespace.
-- New and Returning Users: Multiple scenarios were tested, including new user registration, returning user login, invalid entries, and quitting mid-process.
+1.⁠  Register a New User
+Run the script:
+- bash
+- Copy
+- Edit
+- python3 run.py
+- Select 1. New User (Register).
+- Enter a unique username and baby details.
+- Verify that the new row is added to the user_info worksheet in the Google Sheet.
+
+2.⁠ ⁠Log In as Existing User
+- Restart the script and select 
+- 2. Returning User (Login).
+- Log in using the previously created username.
+- Confirm that profile details are displayed in the terminal.
+- Ensure that the summary worksheet is automatically updated with recent data.
+
+3.⁠ ⁠Log Daily Baby Data
+- From the main menu, select 1. Log Daily Baby Data.
+- Enter the date, hours of sleep, feeding amount, and number of diapers.
+- Check that the data is added to the daily_logs worksheet.
+
+4.⁠ ⁠Log Growth Data
+- From the main menu, select 2. Log Growth Data.
+- Enter date, weight (kg), and height (cm).
+- Verify that the information is saved in the growth worksheet.
+
+5.⁠ Log Milestones
+- From the main menu, select 3. Log Milestones.
+- Enter a date and description of the milestone (e.g., “first word”).
+- Make sure the milestone appears in the milestones worksheet.
+
+6.⁠ ⁠Validate Summary Sheet
+- Confirm that the summary sheet updates correctly after any of the above entries.
+- Make sure the following values are accurately calculated and displayed:
+- Total sleep and feeding over the past 7 days.
+- Total number of wet and dirty diapers.
+- Number of non-empty, non-“None” milestones in the past 7 days.
+- Most recent growth data (weight and height).
 
 ### Validation Testing
 
@@ -329,11 +364,11 @@ To Clone:
 
 ## Create a Virtual Environment (using VS code)
 
-Open the Command Palette (Ctrl + Shift + P on Windows or Cmd + Shift + P on macOS).
-In the Command Palette type: Python: Create Environment.
-Select Python: Create Environment from the list.
-Select Venv from the drop down menu.
-Check that your environment is active by editing an .py file and looking for ('venv': venv) near the bottom right hand corner of the screen.
+- Open the Command Palette (Ctrl + Shift + P on Windows or Cmd + Shift + P on macOS).
+- In the Command Palette type: Python: Create Environment.
+- Select Python: Create Environment from the list.
+- Select Venv from the drop down menu.
+- Check that your environment is active by editing an .py file and looking for ('venv': venv) near the bottom right hand corner of the screen.
 
 ## Technology Used
 
