@@ -137,9 +137,16 @@ It adds a personal touch and improves user experience by clearly signaling the e
 
 8. **Validation**
 
-![UsernameTaken](assets/images/usernametaken.png)
+For feed, sleep, height, weight, and diapers, a visitor should enter numeric values and to make sure to use the correct date format.
+
 ![DateNumeric](assets/images/date.png)
+
+For the main menu, the user can only enter numbers from 1 to 4; no other input is allowed.
+
 ![Questions](assets/images/questions.png)
+
+I wanted it to have a touch of a real app, so the username must be unique — if a user tries to enter one that already exists, an error message is shown.
+
 ![NoUsername](assets/images/usernamenotfound.png)
 
 The app checks for existing entries when logging daily data, growth, or milestones.
@@ -276,12 +283,6 @@ I used the **CI Python Linter** and followed the **PEP8 guidelines** to validate
 
 ![PythonLinter](assets/images/linter.png)
 
-As a result of the linting process, I made the following adjustments:
-
-![Run Python Linter](assets/run-python-linter.png)
-
-![Guide Python Linter](assets/guide-python-linter.png)
-
 ## Deployment
 
 This project was deployed using the Code Institute’s mock terminal for Heroku.
@@ -347,8 +348,8 @@ I've used the following Python packages and/or external imported packages:
 
 ## Credits
 
-https://www.canva.com/dream-lab 
-https://emojipedia.org/ 
+- https://www.canva.com/dream-lab 
+- https://emojipedia.org/ 
 
 ## Acknowledgements
 

@@ -483,7 +483,8 @@ def log_milestones(current_user):
         },
         {
             "key": "milestone",
-            "prompt": "Describe the milestone (e.g., babbling)",
+            "prompt": "Describe the milestone "
+            "(e.g., babbling or 'None')",
             "allow_back": False
         }
     ]
