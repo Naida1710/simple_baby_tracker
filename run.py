@@ -522,7 +522,16 @@ def log_milestones(current_user):
                     Style.RESET_ALL
                 )
                 continue
-
+        
+        if key == "milestone":
+            if response.strip().isdigit():
+                print(
+                    Fore.RED
+                    + "Milestone cannot be numeric only. "
+                    "Please type 'None' if there are no milestones."
+                    + Style.RESET_ALL
+                )
+                continue
         data[key] = response
         current_step += 1
 
@@ -649,7 +658,7 @@ def main_menu(current_user):
 
 def main():
     BOLD = "\033[1m"
-    RESET = "\033[0m"         
+    RESET = "\033[0m"
 
     print(
         Fore.CYAN +
@@ -752,8 +761,7 @@ def main():
                     + "You may now access the main menu."
                     + Style.RESET_ALL
                 )
-                main_menu(current_user)  # call the menu here
-                
+                main_menu(current_user)
                 return
 
             else:

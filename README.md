@@ -51,26 +51,13 @@ The primary goal of the site owner is to empower new parents by offering a relia
 
 ### User Registration
 
-1. Main welcome message
+1. **Main welcome message**
 
 The main welcome message is the friendly introductory text displayed before the program asks the user whether they are a new user or not. It helps set a positive tone and guides them on what to expect.
 
 ![Welcome message](assets/images/Welcome%20message.png)
 
-
-1. Google Sheets Integration
-
-**Secure Access**: Uses gspread with Google Service Account credentials to connect securely to your Google Sheets backend.
-**Multi-Sheet Support**: Stores different data categories in separate sheets:
-- user_info — Stores registered users and their babies’ info.
-- daily_logs — Tracks daily sleep, feeding, and diaper counts.
-- growth — Logs baby’s growth metrics (weight, height).
-- milestones — Records baby developmental milestones.
-- summary — Aggregates weekly summaries for each user.
-
-This structure keeps user's data organized and easily extendable.
-
-2. User Login System
+2. **User Login System**
 
 When the program starts, it displays a prompt asking the user if they are a new user or a returning user. This helps guide users through the appropriate next steps.
 
@@ -78,7 +65,7 @@ When the program starts, it displays a prompt asking the user if they are a new 
 
 This user-friendly menu ensures that both new and returning users can easily access the application and manage their profiles or data accordingly.
 
-3. New User Welcome Message
+3. **New User Welcome Message**
 
 When a new user starts the app, a clear and friendly welcome message guides them through the registration process.
 It explains what information they need (e.g., baby’s birth date and stats), provides instructions on how to quit or go back during input, and sets expectations for what happens after registration (logging in, viewing profile, adding data).
@@ -86,7 +73,7 @@ This feature ensures users feel supported and informed right from the start, imp
 
 ![NewUserWelcomeMessage](assets/images/welcome%20message%202.png)
 
-4. User Registration
+4. **User Registration**
 
 It checks if the chosen username already exists to avoid duplicates.
 It collects baby name, date of birth (validated to ensure proper date format), birth weight, and height.
@@ -101,13 +88,13 @@ This ensures accurate baseline data for each baby.
 
 ![UserInfo](assets/images/User_info.png)
 
-5. Personalized Welcome After Registration 
+5. **Personalized Welcome After Registration** 
 
 After successful registration, the app greets the user by name (e.g., "Hello, (username)! 🎉"), creating a warm and welcoming experience. Once basic baby details are entered, the app seamlessly guides the user to begin daily logging—making the transition into the main tracking features intuitive and friendly.
 
 ![Greeting](assets/images/greetings.png)
 
-4. Daily Baby Data Logging, Growth Data Logging and Milestone Logging
+6. **Daily Baby Data Logging, Growth Data Logging and Milestone Logging**
 
 Users input daily:
 - Date (validated)
@@ -132,7 +119,7 @@ Upon successful submission, the app provides a clear visual confirmation message
 
 ![Logs](assets/images/logs.png)
 
-5. Goodbye Message
+7. **Goodbye Message**
 
 After successfully logging daily baby data, growth metrics, and milestones, the app provides a clear and warm farewell message.
 This message confirms that:
@@ -144,7 +131,7 @@ It adds a personal touch and improves user experience by clearly signaling the e
 
 ![Goodbye](assets/images/goodbye.png)
 
-6. Errors in typing
+8. **Validation**
 
 ![UsernameTaken](assets/images/usernametaken.png)
 ![DateNumeric](assets/images/date.png)
@@ -156,14 +143,19 @@ This prevents duplicate entries and maintains data accuracy.
 Users can then enter a new date or quit the logging process.
 ![DateExists](assets/images/dailylogexists.png)
 
+Users can log developmental milestones for their baby, such as "first smile", "rolling over", or "babbling".
+The system does not accept numeric-only milestone entries to ensure meaningful descriptions. Users are prompted to use words when describing milestones.
 
-7. Back and Quit 
+![Milestones](assets/images/milestones.png)
+
+
+9. **Back and Quit**
 
 ![quit](assets/images/quit.png)
 ![back](assets/images/back.png)
 
 
-8. Returned User Login
+10. **Returned User Login**
 
 Upon starting the application, users are prompted with a Main Menu to identify themselves as a:
 - New User – to register a new profile.
@@ -176,7 +168,7 @@ At any login prompt, users can type 'q' to gracefully exit the program.
 
 ![ReturnedUser](assets/images/returneduser.png)
 
-9. Personalized Welcome Back Message
+11. **Personalized Welcome Back Message**
 
 After a successful login, returning users are greeted with a friendly, personalized message.
 This message confirms that the system has recognized the user and has loaded their baby’s profile and previous data.
@@ -184,14 +176,14 @@ It enhances user experience by making the interaction feel warm and tailored.
 
 ![WelcomeBack](assets/images/helloagain.png)
 
-10. User Profile & Summary View
+12. **User Profile & Summary View**
 
 Upon login, the user is shown their personalized profile with essential baby information.
 Also, a summary sheet is generated and updated with the most recent data entries.
 
 ![Profile](assets/images/profile.png)
 
-11. Main Menu Access 
+13. **Main Menu Access**
 
 After successful login and summary display, users are directed to the Main Menu.
 A simple numeric menu allows users to select what type of data they wish to log.
@@ -201,13 +193,13 @@ It ensures a clear transition from viewing data to updating or logging new entri
 
 ![MainMenu](assets/images/mainmenu.png)
 
-12. Exit And Goodbye Message
+14. **Exit And Goodbye Message**
 
 Users can choose to quit the app anytime from the main menu by selecting option 4. Upon quitting, the app displays a clear and friendly goodbye message. This confirms the session has ended politely and cleanly.
 
 ![Exit](assets/images/Exit.png)
 
-13. Visual Feedback 
+15. **Visual Feedback**
 
 I used colored console text with colorama:
 - Green for success messages
@@ -216,6 +208,20 @@ I used colored console text with colorama:
 - Blue for goodbye message
 - Cyan for instructions
 - Magenta for My Profile and Latest Summary Update Sheet
+
+15. **Google Sheets**
+
+- user_info worksheet
+
+![Users](assets/images/1.png)
+
+- daily_log 
+- growth
+- milestones
+
+- summary worksheet
+
+![Summary](assets/images/2.png)
 
 ## Future Features
 
@@ -262,7 +268,9 @@ Manual tests were carried out throughout the development process. Each feature w
 
 ### Validation Testing
 
-I used the [CI Python Linter](https://pep8ci.herokuapp.com/#) and followed the [PEP8 guidelines](https://peps.python.org/pep-0008/) to validate my code.
+I used the **CI Python Linter** and followed the **PEP8 guidelines** to validate my code.
+
+![PythonLinter](assets/images/linter.png)
 
 As a result of the linting process, I made the following adjustments:
 
