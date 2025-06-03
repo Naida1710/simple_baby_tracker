@@ -244,12 +244,8 @@ def login():
 def log_daily_baby_data(current_user):
     print(f"\n--- Log Daily Baby Data for {current_user} ---")
 
+    # Remove log_date from steps since we auto-fill it
     steps = [
-        {
-            "key": "log_date",
-            "prompt": "Log Date (YYYY-MM-DD)",
-            "allow_back": True,
-        },
         {"key": "sleep_hours", "prompt": "Sleep (hours)", "allow_back": True},
         {"key": "feed_ml", "prompt": "Feed (ml)", "allow_back": True},
         {"key": "wet_diapers", "prompt": "Wet Diapers", "allow_back": True},
@@ -261,7 +257,24 @@ def log_daily_baby_data(current_user):
 
     ]
 
-    data = {"username": current_user}  # set username once here
+    # Auto-fill log_date with today's date
+    log_date = datetime.today().strftime('%Y-%m-%d')
+    print(
+        Fore.YELLOW
+        + f"📅 Log Date (auto-filled): {log_date}"
+        + Style.RESET_ALL
+    )
+
+    # Check if log for this date already exists
+    if log_exists(daily_logs, current_user, log_date):
+        print(
+            Fore.RED
+            + f"🚫 Daily log for {log_date} already exists. Skipping entry."
+            + Style.RESET_ALL
+        )
+        return
+
+    data = {"username": current_user, "log_date": log_date}
     current_step = 0
 
     while current_step < len(steps):
@@ -273,33 +286,11 @@ def log_daily_baby_data(current_user):
         response = user_input(prompt, allow_back=allow_back)
 
         if response == 'b':
-            if current_step == 0:
-                print(
-                    Fore.RED
-                    + "Cannot go back from the log date input."
-                    + Style.RESET_ALL
-                )
-                continue
-            else:
-                current_step -= 1
-                continue
+            current_step = max(current_step - 1, 0)
+            continue
 
-        if key == "log_date":
-            try:
-                datetime.strptime(response, "%Y-%m-%d")
-            except ValueError:
-                print(Fore.RED + "Invalid date format." + Style.RESET_ALL)
-                continue
-
-            if log_exists(daily_logs, current_user, response):
-                print(
-                    Fore.RED
-                    + f"🚫 Daily log for {response} already exists. "
-                      "Please choose another date."
-                    + Style.RESET_ALL
-                )
-                continue
-        elif key in ["sleep_hours", "feed_ml"]:
+        # Validate inputs
+        if key in ["sleep_hours", "feed_ml"]:
             try:
                 float(response)
             except ValueError:
@@ -329,8 +320,9 @@ def log_daily_baby_data(current_user):
         float(data["sleep_hours"]),
         float(data["feed_ml"]),
         int(data["wet_diapers"]),
-        int(data["dirty_diapers"])
+        int(data["dirty_diapers"]),
     ]
+
     daily_logs.append_row(new_row)
     print(Fore.GREEN + "✅ Daily log saved successfully!" + Style.RESET_ALL)
 
@@ -338,19 +330,29 @@ def log_daily_baby_data(current_user):
 def log_growth_data(current_user):
     print(f"\n--- Log Growth Data for {current_user} ---")
 
-    steps = [
-        {
-            "key": "log_date",
-            "prompt": "Log Date (YYYY-MM-DD)",
-            "allow_back": True,
-        },
+    today_date = datetime.today().strftime('%Y-%m-%d')
+    print(
+        Fore.YELLOW
+        + f"📅 Log Date (auto-filled): {today_date}"
+        + Style.RESET_ALL
+    )
 
+    steps = [
         {"key": "weight", "prompt": "Weight (kg)", "allow_back": True},
         {"key": "height", "prompt": "Height (cm)", "allow_back": True},
     ]
 
-    data = {}
+    data = {"log_date": today_date}
     current_step = 0
+
+    if log_exists(growth, current_user, today_date):
+        print(
+            Fore.RED
+            + f"🚫 Growth log for {today_date} already exists. "
+              "Skipping entry."
+            + Style.RESET_ALL
+        )
+        return
 
     while current_step < len(steps):
         step = steps[current_step]
@@ -361,51 +363,22 @@ def log_growth_data(current_user):
         response = user_input(prompt, allow_back=allow_back)
 
         if response == 'b':
-            if current_step == 0:
-                print(
-                    Fore.RED
-                    + "Cannot go back from the log date input."
-                    + Style.RESET_ALL
-                )
-                continue
-            else:
-                current_step -= 1
-                continue
+            current_step -= 1 if current_step > 0 else 0
+            continue
 
-        if key == "log_date":
-            try:
-                datetime.strptime(response, "%Y-%m-%d")
-            except ValueError:
-                print(Fore.RED + "Invalid date format." + Style.RESET_ALL)
-                continue
+        try:
+            data[key] = float(response)
+        except ValueError:
+            print(Fore.RED + "Please enter a numeric value." + Style.RESET_ALL)
+            continue
 
-            if log_exists(growth, current_user, response):
-                print(
-                    Fore.RED
-                    + f"🚫 Growth log for {response} already exists. "
-                    "Please choose another date."
-                    + Style.RESET_ALL
-                )
-                continue
-        elif key in ["weight", "height"]:
-            try:
-                float(response)
-            except ValueError:
-                print(
-                    Fore.RED
-                    + "Please enter numeric values."
-                    + Style.RESET_ALL
-                )
-                continue
-
-        data[key] = response
         current_step += 1
 
     new_row = [
         current_user,
         data["log_date"],
-        float(data["weight"]),
-        float(data["height"]),
+        data["weight"],
+        data["height"],
     ]
     growth.append_row(new_row)
     print(Fore.GREEN + "✅ Growth data saved successfully!" + Style.RESET_ALL)
@@ -446,66 +419,27 @@ def display_user_summary(username):
 
 def log_milestones(current_user):
     print("\n--- Log Baby Milestone ---")
-    username = current_user
 
-    steps = [
-        {
-            "key": "log_date",
-            "prompt": "Log Date (YYYY-MM-DD)",
-            "allow_back": True,
-        },
+    today_date = datetime.today().strftime('%Y-%m-%d')
+    print(
+        Fore.YELLOW
+        + f"📅 Log Date (auto-filled): {today_date}"
+        + Style.RESET_ALL
+    )
 
-        {
-            "key": "milestone",
-            "prompt": "Describe the milestone",
-            "allow_back": False
-        }
+    milestone_text = user_input("Describe the milestone")
 
-    ]
+    if log_exists(milestones, current_user, today_date):
+        print(
+            Fore.RED
+            + f"🚫 Milestone for {today_date} already exists. Skipping entry."
+            + Style.RESET_ALL
+        )
+        return
 
-    data = {}
-    current_step = 0
-
-    while current_step < len(steps):
-        step = steps[current_step]
-        key = step["key"]
-        prompt = step["prompt"]
-
-        response = user_input(prompt, allow_back=False)
-
-        if response == 'b':
-            if current_step == 0:
-                print(
-                    Fore.RED
-                    + "Cannot go back further than this step."
-                    + Style.RESET_ALL
-                )
-                continue
-            else:
-                current_step -= 1
-                continue
-
-        if key == "log_date":
-            try:
-                datetime.strptime(response, "%Y-%m-%d")
-            except ValueError:
-                print(Fore.RED + "Invalid date format." + Style.RESET_ALL)
-                continue
-            if log_exists(milestones, username, response):
-                print(
-                    Fore.RED +
-                    f"🚫 A milestone log for {response} already exists. "
-                    "Please choose another date." +
-                    Style.RESET_ALL
-                )
-                continue
-
-        data[key] = response
-        current_step += 1
-
-    new_row = [username, data["log_date"], data["milestone"]]
+    new_row = [current_user, today_date, milestone_text]
     milestones.append_row(new_row)
-    print(Fore.GREEN + "\n✅ Milestone saved successfully!" + Style.RESET_ALL)
+    print(Fore.GREEN + "✅ Milestone logged successfully!" + Style.RESET_ALL)
 
 
 def update_summary():
