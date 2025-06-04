@@ -1,17 +1,15 @@
 # Standard libraries
 import sys
-
-# Date and time operations
 from datetime import datetime, timedelta
 
-# Library for interaction with Google Sheets
+# Third party libraries
 import gspread
-
-# Authentication for Google API requests using a service account
 from google.oauth2.service_account import Credentials
-
-# Terminal style text
 from colorama import init, Fore, Style
+
+# ANSI escape sequences for bold formatting
+BOLD = "\033[1m"
+RESET = "\033[0m"
 
 # Reset text color after each print
 init(autoreset=True)
@@ -53,9 +51,6 @@ def log_exists(sheet, username, log_date):
 
 
 def user_input(prompt, allow_back=True, allow_quit=True):
-    # ANSI escape sequences for bold formatting
-    BOLD = "\033[1m"
-    RESET = "\033[0m"
 
     suffix = ""
     # Build the input suffix message based on allowed actions
@@ -77,9 +72,9 @@ def user_input(prompt, allow_back=True, allow_quit=True):
     # Handle quit command if allowed
     if allow_quit and response.lower() in ['q', 'quit', 'exit']:
         print(
-            Fore.BLUE
-            + BOLD + "Exiting the program. Goodbye!"
-            + RESET + Style.RESET_ALL
+            Fore.BLUE + BOLD +
+            "Exiting the program. Goodbye!" +
+            RESET + Style.RESET_ALL
         )
 
         # Return the user's input
@@ -114,7 +109,6 @@ def verify_password(username, password):
     # Get all records from the user_info worksheet
     records = user_info.get_all_values()[1:]
 
-    # Check each row for a matching username and password
     for row in records:
         if row[0] == username and row[1] == password:
             return True
@@ -122,20 +116,19 @@ def verify_password(username, password):
 
 
 def add_new_user():
-    BOLD = "\033[1m"
-    RESET = "\033[0m"
 
     # Introductory message with instructions
     print(
         Fore.CYAN
-        +
-        "\n________________________________________________________________"
+        + "\n" + "_" * 66
         + Style.RESET_ALL
     )
     print(
         Fore.YELLOW
-        + BOLD + "\n👋 Welcome, new user!"
-        + RESET + Style.RESET_ALL
+        + BOLD
+        + "\n👋 Welcome, new user!"
+        + RESET
+        + Style.RESET_ALL
     )
     print(Fore.YELLOW + "\n🍼 Let's get you set up." + Style.RESET_ALL)
     print(
@@ -144,30 +137,34 @@ def add_new_user():
         + Style.RESET_ALL
     )
     print(
-        Fore.YELLOW + "Make sure you have your baby's date of birth "
-        "and birth stats ready." + Style.RESET_ALL)
+        Fore.YELLOW
+        + "Make sure you have your baby's date of birth "
+        + "and birth stats ready."
+        + Style.RESET_ALL
+    )
     print(
         Fore.YELLOW
         + "Type 'q' to quit at any point, or 'b' to go back to "
-        "a prior input."
+        + "a prior input."
         + Style.RESET_ALL
     )
     print(
         Fore.YELLOW
         + "Once registered, "
-        "simply log in to view your profile and summary."
+        + "simply log in to view your profile and summary."
         + Style.RESET_ALL
     )
     print(
         Fore.YELLOW
         + "Continue by adding "
-        "new data or check your existing info anytime."
+        + "new data or check your existing info anytime."
         + Style.RESET_ALL
     )
+
     print(Fore.YELLOW + "\n🎬 Let's begin!" + Style.RESET_ALL)
     print(
         Fore.CYAN
-        + "\n________________________________________________________________"
+        + "\n" + "_" * 66
         + Style.RESET_ALL
     )
 
@@ -256,7 +253,7 @@ def add_new_user():
 
     print(
         Fore.CYAN
-        + "\n________________________________________________________________"
+        + "\n" + "_" * 66
         + Style.RESET_ALL
     )
     print()
@@ -264,8 +261,8 @@ def add_new_user():
     print(
         Fore.CYAN
         + "Now that you've entered the details about your baby, "
-          "we can move on to daily logs. "
-          + Style.RESET_ALL
+        + "we can move on to daily logs. "
+        + Style.RESET_ALL
     )
 
     return data["username"]
@@ -274,13 +271,12 @@ def add_new_user():
 def login():
     print(
         Fore.CYAN
-        + "\n________________________________________________________________"
+        + "\n" + "_" * 66
         + Style.RESET_ALL
     )
     print()
     # Prompt user to log in
-    print(Fore.CYAN + "Please log in:" + Style.RESET_ALL
-          )
+    print(Fore.CYAN + "Please log in:" + Style.RESET_ALL)
 
     while True:
         # Get username input from user; no back option, but can quit
@@ -304,8 +300,7 @@ def login():
             )
             print(
                 Fore.CYAN
-                + "\n___________________________________________"
-                "_____________________"
+                + "\n" + "_" * 66
                 + Style.RESET_ALL
             )
             print()
@@ -379,7 +374,7 @@ def log_daily_baby_data(current_user):
                 print(
                     Fore.RED
                     + f"🚫 Daily log for {response} already exists. "
-                    "Please choose another date."
+                    + "Please choose another date."
                     + Style.RESET_ALL
                 )
                 continue
@@ -476,7 +471,7 @@ def log_growth_data(current_user):
                 print(
                     Fore.RED
                     + f"🚫 Growth log for {response} already exists. "
-                    "Please choose another date."
+                    + "Please choose another date."
                     + Style.RESET_ALL
                 )
                 continue
@@ -611,10 +606,10 @@ def log_milestones(current_user):
                 continue
             if log_exists(milestones, username, response):
                 print(
-                    Fore.RED +
-                    f"🚫 A milestone log for {response} already exists. "
-                    "Please choose another date." +
-                    Style.RESET_ALL
+                    Fore.RED
+                    + f"🚫 A milestone log for {response} already exists. "
+                    + "Please choose another date."
+                    + Style.RESET_ALL
                 )
                 continue
 
@@ -623,7 +618,7 @@ def log_milestones(current_user):
                 print(
                     Fore.RED
                     + "Milestone cannot be numeric only. "
-                    "Please type 'None' if there are no milestones."
+                    + "Please type 'None' if there are no milestones."
                     + Style.RESET_ALL
                 )
                 continue
@@ -646,9 +641,11 @@ def update_summary():
     print("\n--- LOADING SUMMARY SHEET... ---")
     summary_sheet.clear()
 
-    headers = ["Username", "Total Sleep (hrs)", "Total Feed (ml)",
-               "Milestones Achieved", "Latest Weight", "Latest Height",
-               "Total Wet Diapers", "Total Dirty Diapers"]
+    headers = [
+        "Username", "Total Sleep (hrs)", "Total Feed (ml)",
+        "Milestones Achieved", "Latest Weight", "Latest Height",
+        "Total Wet Diapers", "Total Dirty Diapers"
+    ]
     summary_sheet.append_row(headers)
 
     today = datetime.today()
@@ -672,11 +669,9 @@ def update_summary():
         total_sleep = sum(
             float(row[2]) for row in recent_logs if row[2].strip()
         )
-
         total_feed = sum(
             float(row[3]) for row in recent_logs if row[3].strip()
         )
-
         total_wet_diapers = sum(
             int(row[4]) for row in recent_logs if row[4].strip()
         )
@@ -684,7 +679,9 @@ def update_summary():
             int(row[5]) for row in recent_logs if row[5].strip()
         )
 
-        user_milestones = [row for row in milestone_rows if row[0] == username]
+        user_milestones = [
+            row for row in milestone_rows if row[0] == username
+        ]
         recent_milestones = [
             row for row in user_milestones
             if datetime.strptime(row[1], '%Y-%m-%d') >= week_ago
@@ -731,9 +728,6 @@ def main_menu(current_user):
     growth data, milestones, or quitting the app. The selected
     option is handled via a loop and passed to the relevant function.
     """
-
-    BOLD = "\033[1m"
-    RESET = "\033[0m"
     while True:
         print()
         print(Fore.CYAN + "Choose an option:" + Style.RESET_ALL)
@@ -770,12 +764,9 @@ def main():
     updates and shows the weekly summary, and opens the main menu.
     """
 
-    BOLD = "\033[1m"
-    RESET = "\033[0m"
-
     print(
-        Fore.CYAN +
-        "\n________________________________________________________________"
+        Fore.CYAN
+        + "\n" + "_" * 66
         + Style.RESET_ALL
     )
     print(
@@ -787,13 +778,13 @@ def main():
     print(
         Fore.YELLOW
         + "\n⭐ This app helps you track your baby's data "
-        "during their 1st year."
+        + "during their 1st year."
         + Style.RESET_ALL
     )
     print(
         Fore.YELLOW
         + "\n💚 Log daily activities, growth, and developmental "
-        "milestones."
+        + "milestones."
         + Style.RESET_ALL
     )
     print(
@@ -808,7 +799,7 @@ def main():
     )
     print(
         Fore.CYAN
-        + "\n________________________________________________________________"
+        + "\n" + "_" * 66
         + Style.RESET_ALL
     )
 
@@ -837,8 +828,7 @@ def main():
                 log_milestones(current_user)
                 print(
                     Fore.CYAN
-                    + "\n_________________________________________________"
-                    "_______________"
+                    + "\n" + "_" * 66
                     + Style.RESET_ALL
                 )
                 print()
@@ -864,8 +854,7 @@ def main():
                 display_user_summary(current_user)
                 print(
                     Fore.CYAN
-                    + "\n_______________________________________"
-                    "_________________________"
+                    + "\n" + "_" * 66
                     + Style.RESET_ALL
                 )
                 print()  # blank line for spacing
@@ -895,7 +884,7 @@ def main():
 
         print(
             Fore.CYAN
-            + "\n____________________________________________________________"
+            + "\n" + "_" * 66
             + Style.RESET_ALL
         )
 

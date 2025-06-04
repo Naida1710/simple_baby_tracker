@@ -315,9 +315,7 @@ Run the script:
 6.⁠ ⁠Validate Summary Sheet
 - Confirm that the summary sheet updates correctly after any of the above entries.
 - Make sure the following values are accurately calculated and displayed:
-- Total sleep and feeding over the past 7 days.
 - Total number of wet and dirty diapers.
-- Number of non-empty, non-“None” milestones in the past 7 days.
 - Most recent growth data (weight and height).
 
 ### Validation Testing
@@ -325,6 +323,15 @@ Run the script:
 I used the **CI Python Linter** and followed the **PEP8 guidelines** to validate my code.
 
 ![PythonLinter](assets/images/linter.png)
+
+I followed PEP 8 style guidelines:
+
+- Line breaks are used to keep each line under 79 characters.
+- The + operator is placed at the beginning of continued lines for better readability.
+- Indentation is consistent, and string concatenation is explicit and clean.
+- I put the import libraries in the correct order.
+- I used Hanging Indent, which is preferred for long lists.
+- BOLD/RESET codes were used repeatedly across multiple functions. I definied them at the module level (top of the file).
 
 ## Deployment
 
