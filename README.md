@@ -252,6 +252,7 @@ I used colored console text with colorama:
 - Add password and password reset option (Although this option was initially included, but I removed it in agreement with my mentor.)
 - Allow users to export their baby’s logged data as CSV or simple text reports.
 - Add the function to View Today's Summary for the Logged-in Users.
+- Add auto-filled date, so that the user can skip the manual date logging.
 
 ## Bugs
 
@@ -366,8 +367,8 @@ To Clone:
 
 1. Go to the forked repository on Github.
 2. Click the green "Code" button.
-3. Copy the HTTPS link: 
-4. Open your terminal and type: git clone 
+3. Copy the HTTPS link:  https://github.com/Naida1710/simple_baby_tracker.git
+4. Open your terminal and type: git clone https://github.com/Naida1710/simple_baby_tracker.git
 
 ## Create a Virtual Environment (using VS code)
 
