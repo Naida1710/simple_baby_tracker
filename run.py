@@ -1,22 +1,41 @@
-import gspread
-from google.oauth2.service_account import Credentials
-from datetime import datetime, timedelta
+# Standard libraries
 import sys
+
+# Date and time operations
+from datetime import datetime, timedelta
+
+# Library for interaction with Google Sheets
+import gspread
+
+# Authentication for Google API requests using a service account
+from google.oauth2.service_account import Credentials
+
+# Terminal style text
 from colorama import init, Fore, Style
 
+# Reset text color after each print
 init(autoreset=True)
 
+# Required Google API scopes
 SCOPE = [
     "https://www.googleapis.com/auth/spreadsheets",
     "https://www.googleapis.com/auth/drive.file",
     "https://www.googleapis.com/auth/drive"
 ]
 
+# Load credentials from the service account
 CREDS = Credentials.from_service_account_file('creds.json')
+
+# Apply the required access scopes to credentials
 SCOPED_CREDS = CREDS.with_scopes(SCOPE)
+
+# Authorize a gspread client using the scoped credentials
 GSPREAD_CLIENT = gspread.authorize(SCOPED_CREDS)
+
+# Open the Google Sheet for reading and writing
 SHEET = GSPREAD_CLIENT.open('simple_baby_tracker')
 
+# Access to the worksheets
 user_info = SHEET.worksheet('user_info')
 daily_logs = SHEET.worksheet('daily_logs')
 growth = SHEET.worksheet('growth')
@@ -24,6 +43,7 @@ milestones = SHEET.worksheet('milestones')
 summary_sheet = SHEET.worksheet('summary')
 
 
+# Prevent duplicate log entries
 def log_exists(sheet, username, log_date):
     records = sheet.get_all_values()[1:]
     for row in records:
@@ -33,9 +53,12 @@ def log_exists(sheet, username, log_date):
 
 
 def user_input(prompt, allow_back=True, allow_quit=True):
+    # ANSI escape sequences for bold formatting
     BOLD = "\033[1m"
     RESET = "\033[0m"
+
     suffix = ""
+    # Build the input suffix message based on allowed actions
     if allow_quit:
         suffix += " (or type 'q' to quit"
         if allow_back:
@@ -47,32 +70,51 @@ def user_input(prompt, allow_back=True, allow_quit=True):
             suffix += " (or type 'b' to go back): "
         else:
             suffix += ": "
+
+    # Prompt the user with the message and suffix, strip extra spaces
     response = input(prompt.rstrip(": ") + suffix).strip()
+
+    # Handle quit command if allowed
     if allow_quit and response.lower() in ['q', 'quit', 'exit']:
         print(
             Fore.BLUE
             + BOLD + "Exiting the program. Goodbye!"
             + RESET + Style.RESET_ALL
         )
+
+        # Return the user's input
         sys.exit()
+
+    # Handle back command if allowed
     if allow_back and response.lower() == 'b':
         return 'b'
     return response
 
 
 def calculate_age_months(dob_str):
+    # Convert the date of birth string to a datetime object
     dob = datetime.strptime(dob_str, '%Y-%m-%d')
+
+    # Get the current date
     today = datetime.today()
+
+    # Calculate the age in months
     age_months = (today.year - dob.year) * 12 + (today.month - dob.month)
+
+    # Return the total number of months
     return age_months
 
 
 def is_username_taken(username):
+    # Check if the username exists in the user_info worksheet
     return username in user_info.col_values(1)
 
 
 def verify_password(username, password):
+    # Get all records from the user_info worksheet
     records = user_info.get_all_values()[1:]
+
+    # Check each row for a matching username and password
     for row in records:
         if row[0] == username and row[1] == password:
             return True
@@ -83,6 +125,7 @@ def add_new_user():
     BOLD = "\033[1m"
     RESET = "\033[0m"
 
+    # Introductory message with instructions
     print(
         Fore.CYAN
         +
@@ -108,13 +151,13 @@ def add_new_user():
         + "Type 'q' to quit at any point, or 'b' to go back to "
         "a prior input."
         + Style.RESET_ALL
-        )
+    )
     print(
         Fore.YELLOW
         + "Once registered, "
         "simply log in to view your profile and summary."
         + Style.RESET_ALL
-        )
+    )
     print(
         Fore.YELLOW
         + "Continue by adding "
@@ -128,6 +171,7 @@ def add_new_user():
         + Style.RESET_ALL
     )
 
+    # Setup questions for user registration
     steps = [
         {"key": "username", "prompt": "Username", "allow_back": False},
         {"key": "baby_name", "prompt": "Baby Name"},
@@ -139,14 +183,17 @@ def add_new_user():
     data = {}
     current_step = 0
 
+    # Loop through each step of the form
     while current_step < len(steps):
         step = steps[current_step]
         key = step["key"]
         prompt = step["prompt"]
         allow_back = step.get("allow_back", True)
 
+        # Get user input for the current step
         response = user_input(prompt, allow_back=allow_back)
 
+        # Handle 'back' option
         if response == 'b':
             if current_step > 0:
                 current_step -= 1
@@ -154,6 +201,7 @@ def add_new_user():
                 print(Fore.RED + "Cannot go back further." + Style.RESET_ALL)
             continue
 
+        # Validation for username: ensure it's unique
         if key == "username":
             if is_username_taken(response):
                 print(
@@ -162,6 +210,8 @@ def add_new_user():
                     + Style.RESET_ALL
                 )
                 continue
+
+        # Validation for date: must match YYYY-MM-DD
         elif key == "baby_dob":
             try:
                 datetime.strptime(response, "%Y-%m-%d")
@@ -172,6 +222,8 @@ def add_new_user():
                     + Style.RESET_ALL
                 )
                 continue
+
+        # Validation for numeric weight/height
         elif key == "birth_weight" or key == "birth_height":
             try:
                 float(response)
@@ -183,9 +235,11 @@ def add_new_user():
                 )
                 continue
 
+        # Save valid input
         data[key] = response
         current_step += 1
 
+    # Calculate baby's age in months and prepare row for worksheet
     baby_age_months = calculate_age_months(data["baby_dob"])
     new_row = [
         data["username"],
@@ -197,6 +251,7 @@ def add_new_user():
     ]
     user_info.append_row(new_row)
 
+    # Confirmation message
     print(Fore.GREEN + "\n✅ Registration successful!" + Style.RESET_ALL)
 
     print(
@@ -223,14 +278,17 @@ def login():
         + Style.RESET_ALL
     )
     print()
+    # Prompt user to log in
     print(Fore.CYAN + "Please log in:" + Style.RESET_ALL
           )
 
     while True:
+        # Get username input from user; no back option, but can quit
         username = user_input("Username", allow_back=False, allow_quit=True)
         if username == 'b':
             return False
         if not is_username_taken(username):
+            # Check if the entered username exists in the user_info sheet
             print(
                 Fore.RED
                 + "Username not found. Please try again."
@@ -238,6 +296,7 @@ def login():
             )
         else:
             print()
+            # Successful login message and welcome greeting
             print(
                 Fore.GREEN
                 + "Login successful!"
@@ -259,10 +318,11 @@ def login():
 
 
 def log_daily_baby_data(current_user):
-
+    # Print header showing which user we are logging data for
     print()
     print(f"\n--- Log Daily Baby Data for {current_user} ---")
 
+    # Define the input steps and prompts for daily log data entry
     steps = [
         {
             "key": "log_date",
@@ -280,9 +340,11 @@ def log_daily_baby_data(current_user):
 
     ]
 
-    data = {"username": current_user}  # set username once here
+    # Initialize data dictionary with the current username
+    data = {"username": current_user}
     current_step = 0
 
+    # Loop through all input steps until all are completed
     while current_step < len(steps):
         step = steps[current_step]
         key = step["key"]
@@ -292,6 +354,7 @@ def log_daily_baby_data(current_user):
         response = user_input(prompt, allow_back=allow_back)
 
         if response == 'b':
+            # Handle going back to previous step, except from log_date step
             if current_step == 0:
                 print(
                     Fore.RED
@@ -303,6 +366,7 @@ def log_daily_baby_data(current_user):
                 current_step -= 1
                 continue
 
+        # Validate log_date input format and duplication
         if key == "log_date":
             try:
                 datetime.strptime(response, "%Y-%m-%d")
@@ -310,14 +374,16 @@ def log_daily_baby_data(current_user):
                 print(Fore.RED + "Invalid date format." + Style.RESET_ALL)
                 continue
 
+            # Check if a log for this user and date already exists
             if log_exists(daily_logs, current_user, response):
                 print(
                     Fore.RED
                     + f"🚫 Daily log for {response} already exists. "
-                      "Please choose another date."
+                    "Please choose another date."
                     + Style.RESET_ALL
                 )
                 continue
+        # Validate sleep_hours and feed_ml as valid floating-point numbers
         elif key in ["sleep_hours", "feed_ml"]:
             try:
                 float(response)
@@ -328,6 +394,7 @@ def log_daily_baby_data(current_user):
                     + Style.RESET_ALL
                 )
                 continue
+        # Validate wet_diapers and dirty_diapers as valid numbers
         elif key in ["wet_diapers", "dirty_diapers"]:
             try:
                 int(response)
@@ -342,6 +409,7 @@ def log_daily_baby_data(current_user):
         data[key] = response
         current_step += 1
 
+    # Prepare a new row with all input data to append to the Google Sheet
     new_row = [
         data["username"],
         data["log_date"],
@@ -355,6 +423,12 @@ def log_daily_baby_data(current_user):
 
 
 def log_growth_data(current_user):
+    """
+    Prompts the user to log their baby's growth data.
+    Validates input formats, prevents duplicate entries for the same date, and
+    appends the new data to the 'growth' Google Sheet. Allows navigation back
+    to previous steps during input (except log date).
+    """
     print(f"\n--- Log Growth Data for {current_user} ---")
 
     steps = [
@@ -431,6 +505,12 @@ def log_growth_data(current_user):
 
 
 def show_user_profile(username):
+    """
+    Displays the user profile by fetching baby details from the
+    'user_info' sheet. Shows name, birth date, age, birth weight,
+    and height. If the username is not found, shows an error.
+    """
+
     print()
     print(Fore.MAGENTA + "--- Your Profile ---" + Style.RESET_ALL)
     records = user_info.get_all_values()[1:]
@@ -447,6 +527,12 @@ def show_user_profile(username):
 
 
 def display_user_summary(username):
+    """
+    Fetches and displays the summary data for the given user from the
+    'summary_sheet'. If data is found, prints each field with its
+    header. Otherwise, shows a 'no summary found' message.
+    """
+
     print()
     print(
         Fore.MAGENTA
@@ -464,6 +550,12 @@ def display_user_summary(username):
 
 
 def log_milestones(current_user):
+    """
+    Allows the user to log a milestone (e.g., crawling) for a given date.
+    Validates date format, avoids duplicates, and ensures the milestone
+    is not numeric-only. Adds data to the 'milestones' sheet.
+    """
+
     print("\n--- Log Baby Milestone ---")
 
     username = current_user
@@ -525,7 +617,7 @@ def log_milestones(current_user):
                     Style.RESET_ALL
                 )
                 continue
-        
+
         if key == "milestone":
             if response.strip().isdigit():
                 print(
@@ -544,6 +636,13 @@ def log_milestones(current_user):
 
 
 def update_summary():
+    """
+    Updates the 'summary_sheet' with the past week's data for each user.
+    This includes total sleep hours, feed volume, diaper counts,
+    milestone achievements, and the latest growth records. Clears the
+    sheet first, recalculates values, and appends a row per user.
+    """
+
     print("\n--- LOADING SUMMARY SHEET... ---")
     summary_sheet.clear()
 
@@ -563,7 +662,6 @@ def update_summary():
     for user in user_rows:
         username = user[0]
 
-        # Filter daily logs for this user and last 7 days
         user_daily_logs = [row for row in daily_rows if row[0] == username]
         recent_logs = [
             row for row in user_daily_logs
@@ -579,7 +677,6 @@ def update_summary():
             float(row[3]) for row in recent_logs if row[3].strip()
         )
 
-        # Calculate total wet and dirty diapers in last 7 days
         total_wet_diapers = sum(
             int(row[4]) for row in recent_logs if row[4].strip()
         )
@@ -587,7 +684,6 @@ def update_summary():
             int(row[5]) for row in recent_logs if row[5].strip()
         )
 
-        # Count milestones this week for user, exclude "None" or empty
         user_milestones = [row for row in milestone_rows if row[0] == username]
         recent_milestones = [
             row for row in user_milestones
@@ -597,7 +693,6 @@ def update_summary():
         ]
         milestones_count = len(recent_milestones)
 
-        # Get latest growth record for user
         user_growth = [row for row in growth_rows if row[0] == username]
         if user_growth:
             user_growth.sort(
@@ -630,6 +725,13 @@ def update_summary():
 
 
 def main_menu(current_user):
+    """
+    Displays the main menu for returning users after login.
+    Allows the user to choose between logging daily data,
+    growth data, milestones, or quitting the app. The selected
+    option is handled via a loop and passed to the relevant function.
+    """
+
     BOLD = "\033[1m"
     RESET = "\033[0m"
     while True:
@@ -660,6 +762,14 @@ def main_menu(current_user):
 
 
 def main():
+    """
+    Entry point of the Baby Tracker app.
+    Greets the user and asks whether they are new or returning.
+    For new users: runs registration and initial logging steps.
+    For returning users: logs them in, displays their profile,
+    updates and shows the weekly summary, and opens the main menu.
+    """
+
     BOLD = "\033[1m"
     RESET = "\033[0m"
 
